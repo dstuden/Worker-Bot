@@ -147,12 +147,11 @@ module.exports = async (client, message) => {
 
                     const guildChannels = message.guild.channels.cache.array().filter(channel => channel.type === 'text');
                     guildChannels.forEach(channel => {
-                        channel.overwritePermissions([
-                            {
-                                id: message.member.guild.roles.cache.find(role => role.name === "MUTED").id,
-                                deny: ['SEND_MESSAGES', 'ADD_REACTIONS']
-                            },
-                        ], 'Lockdown');
+                        message.channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "MUTED"), {
+                            SEND_MESSAGES: false
+                          })
+                            .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
+                            .catch(console.error);
                     })
 
                     const embed = new MessageEmbed()
@@ -170,16 +169,10 @@ module.exports = async (client, message) => {
                         reason: 'we needed a role for annoying People',
                     });
 
-                    channel.overwritePermissions([
-                        {
-                            id: message.member.guild.roles.cache.find(role => role.name === "MUTED").id,
-                            deny: ['SEND_MESSAGES', 'ADD_REACTIONS']
-                        },
-                    ], 'Lockdown');
-
+                    
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
-                        .setTitle('Created role MUTED and modified permissions')
+                        .setTitle('Created role MUTED')
 
                     message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
