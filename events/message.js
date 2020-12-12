@@ -147,7 +147,7 @@ module.exports = async (client, message) => {
 
                     const guildChannels = message.guild.channels.cache.array().filter(channel => channel.type === 'text');
                     guildChannels.forEach(channel => {
-                        message.channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "MUTED"), {
+                        channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "MUTED"), {
                             SEND_MESSAGES: false
                           })
                             .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
