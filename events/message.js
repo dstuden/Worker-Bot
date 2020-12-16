@@ -2,6 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
 const { findOne } = require('../models/guild');
 const Guild = require('../models/guild');
+const talkedRecently = new Set();
 
 module.exports = async (client, message) => {
 
@@ -23,33 +24,35 @@ module.exports = async (client, message) => {
             .then(result => console.log(result))
             .catch(err => console.error(err));
 
-            message.delete();
-            const embed = new MessageEmbed()
-                .setColor(process.env.COLOR)
-                .setTitle('This server was not in my database! You can now use commands!');
+        const embed = new MessageEmbed()
+            .setColor(process.env.COLOR)
+            .setTitle('This server was not in my database! You can now use commands!');
 
-            return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+        return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
     } else {
     }
     const prefix = settings.prefix;
 
-    if (message.member.bot) return;
-    if (!message.guild) return;
+    if (message.member.bot || !message.guild) return;
 
     if (message.content.startsWith(prefix + "ping")) {
         if (message.content.endsWith("ping")) {
-            message.delete();
-            const embed = new MessageEmbed()
+            const embed1 = new MessageEmbed()
                 .setColor(process.env.COLOR)
-                .setTitle('🏓 Pong!');
+                .setTitle('🏓 Pinging...')
+            const msg = await message.channel.send(embed1);
 
-            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            const embed2 = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle('🏓 Pong!')
+                .setDescription(`Bot Latency is **${Math.floor(msg.createdTimestamp - message.createdTimestamp)} ms** \nAPI Latency is **${Math.round(client.ws.ping)} ms**`);
+
+            message.channel.send(embed2);
         }
     }
 
     else if (message.content.startsWith(prefix + "serverinfo")) {
         if (message.content.endsWith("serverinfo")) {
-            message.delete();
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle(message.guild.name)
@@ -62,7 +65,7 @@ module.exports = async (client, message) => {
                 .addField('Roles', message.guild.roles.cache.size)
                 .addField('Created at', message.guild.createdAt);
 
-            return message.channel.send(embed).then(m => m.delete({ timeout: 20000 })).catch(err => console.error(err));
+            return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
         }
     }
@@ -70,7 +73,6 @@ module.exports = async (client, message) => {
     else if (message.content.startsWith(prefix + "gengay")) {
         if (message.content.endsWith("gengay")) {
             if (message.member.hasPermission('MANAGE_ROLES')) {
-                message.delete();
                 if (message.member.guild.roles.cache.find(role => role.name === "GAY")) {
 
                     const embed = new MessageEmbed()
@@ -106,7 +108,6 @@ module.exports = async (client, message) => {
     else if (message.content.startsWith(prefix + "genstraight")) {
         if (message.content.endsWith("genstraight")) {
             if (message.member.hasPermission('MANAGE_ROLES')) {
-                message.delete();
                 if (message.member.guild.roles.cache.find(role => role.name === "STRAIGHT")) {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
@@ -142,14 +143,13 @@ module.exports = async (client, message) => {
     else if (message.content.startsWith(prefix + "genmute")) {
         if (message.content.endsWith("genmute")) {
             if (message.member.hasPermission('MANAGE_ROLES')) {
-                message.delete();
                 if (message.member.guild.roles.cache.find(role => role.name === "MUTED")) {
 
                     const guildChannels = message.guild.channels.cache.array().filter(channel => channel.type === 'text');
                     guildChannels.forEach(channel => {
                         channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "MUTED"), {
                             SEND_MESSAGES: false
-                          })
+                        })
                             .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
                             .catch(console.error);
                     })
@@ -169,7 +169,7 @@ module.exports = async (client, message) => {
                         reason: 'we needed a role for annoying People',
                     });
 
-                    
+
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle('Created role MUTED')
@@ -188,7 +188,6 @@ module.exports = async (client, message) => {
     }
 
     else if (message.content.startsWith(prefix + "kick")) {
-        message.delete();
         if (!message.member.hasPermission('KICK_MEMBERS')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
@@ -239,7 +238,6 @@ module.exports = async (client, message) => {
     }
 
     else if (message.content.startsWith(prefix + "ban")) {
-        message.delete();
         if (!message.member.hasPermission('BAN_MEMBERS')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
@@ -293,7 +291,6 @@ module.exports = async (client, message) => {
     }
 
     else if (message.content.startsWith(prefix + "mute")) {
-        message.delete();
         if (!message.member.hasPermission('MANAGE_ROLES')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
@@ -335,7 +332,6 @@ module.exports = async (client, message) => {
     }
 
     else if (message.content.startsWith(prefix + "unmute")) {
-        message.delete();
         if (!message.member.hasPermission('MANAGE_ROLES')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
@@ -377,32 +373,43 @@ module.exports = async (client, message) => {
     }
 
     else if (message.content.startsWith(prefix + "delete")) {
-        message.delete();
         if (message.member.hasPermission('MANAGE_MESSAGES')) {
-
-            message.delete();
-            let deleteNum = message.content.split(' ');
-
-            message.channel.bulkDelete(deleteNum[1]).catch(error => {
-
+            if (talkedRecently.has(message.author.id)) {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
-                    .setTitle('Failed!');
+                    .setTitle('Please wait before using this command again!')
 
-                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+            } else {
 
-            });
+                let deleteNum = message.content.split(' ');
+
+                message.channel.bulkDelete(deleteNum[1]).catch(error => {
+
+                    const embed = new MessageEmbed()
+                        .setColor(process.env.COLOR)
+                        .setTitle('Failed!');
+
+                    message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+
+                });
+
+                talkedRecently.add(message.member.id);
+                setTimeout(() => {
+                    // Removes the user from the set after a minute
+                    talkedRecently.delete(message.member.id);
+                }, 5000);
+            }
         } else {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that')
 
-            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
         }
     }
 
     else if (message.content.startsWith(prefix + "prefix")) {
-        message.delete();
         if (message.member.hasPermission("MANAGE_GUILD")) {
             const newPrefix = message.content.split(' ');
 
@@ -441,7 +448,6 @@ module.exports = async (client, message) => {
 
     else if (message.content.startsWith(prefix + "help")) {
         if (message.content.endsWith("help")) {
-            message.delete();
 
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
