@@ -666,6 +666,8 @@ module.exports = async (client, message) => {
                     { name: prefix + 'delete', value: 'delete the specific number of messages', inline: true },
                     { name: prefix + 'help', value: 'helps you', inline: true },
                     { name: prefix + 'funny', value: "It's just funny", inline: true },
+                    { name: prefix + 'say', value: "Repeats after you", inline: true },
+                    { name: prefix + 'leave', value: "Leaves the guild", inline: true },
                     { name: prefix + 'serverinfo', value: 'shows information about the current server', inline: true },
                     { name: prefix + 'prefix', value: 'sets the prefix for the current server', inline: true },
                 )
