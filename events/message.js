@@ -2,9 +2,14 @@ const { MessageEmbed } = require('discord.js');
 const mongoose = require('mongoose');
 const { findOne } = require('../models/guild');
 const Guild = require('../models/guild');
+var fs = require('fs');
 const talkedRecently = new Set();
 
 module.exports = async (client, message) => {
+    if (message.author.bot) return;
+    if (!message.guild) {
+        return;
+    }
 
     const settings = await Guild.findOne({
         guildID: message.guild.id
@@ -33,14 +38,11 @@ module.exports = async (client, message) => {
     }
     const prefix = settings.prefix;
 
-    if (message.member.bot || !message.guild) return;
 
     if (message.content.startsWith(prefix + "ping")) {
         if (message.content.endsWith("ping")) {
-            const embed1 = new MessageEmbed()
-                .setColor(process.env.COLOR)
-                .setTitle('🏓 Pinging...')
-            const msg = await message.channel.send(embed1);
+
+            const msg = await message.channel.send('🏓 Pinging...');
 
             const embed2 = new MessageEmbed()
                 .setColor(process.env.COLOR)
@@ -48,6 +50,55 @@ module.exports = async (client, message) => {
                 .setDescription(`Bot Latency is **${Math.floor(msg.createdTimestamp - message.createdTimestamp)} ms** \nAPI Latency is **${Math.round(client.ws.ping)} ms**`);
 
             message.channel.send(embed2);
+        }
+    }
+
+    else if (message.content.startsWith(prefix + "funny")) {
+        if (message.content.endsWith(prefix + "funny")) {
+
+            function getRandomLine(filename) {
+                var data = fs.readFileSync(filename, "utf8");
+                var lines = data.split('\n');
+                return lines[Math.floor(Math.random() * lines.length)];
+            }
+            var the_random_line_text = getRandomLine('./images/memes.txt');
+
+            const embed = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle('Peepo Pog Wow!')
+                .setImage(the_random_line_text);
+
+            message.channel.send(embed);
+        }
+    }
+
+    if (message.content.startsWith(prefix + "say")) {
+        const content = message.content.split(' ').slice(1).join(' ');
+        message.delete().catch(err => console.error(err));
+        if (content.length == 0) {
+            const embed = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle('Enter the message!')
+            message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+        }
+        else {
+            message.channel.send(content).catch(err => console.error(err));
+        }
+
+    }
+
+    if (message.content.startsWith(prefix + "leave")) {
+        if (message.content.endsWith(prefix + 'leave')) {
+            message.delete();
+            if (message.member.hasPermission('MANAGE_GUILD'||'KICK_MEMBERS')) {
+                message.guild.leave();
+            } else {
+                const embed = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle('You dont have the permissions to do that!')
+
+                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            }
         }
     }
 
@@ -187,6 +238,66 @@ module.exports = async (client, message) => {
         }
     }
 
+    else if (message.content.startsWith(prefix + "genabyss")) {
+        if (message.content.endsWith("genabyss")) {
+            if (message.member.hasPermission('MANAGE_ROLES')) {
+                if (message.member.guild.roles.cache.find(role => role.name === "ABYSS")) {
+
+                    const guildChannelsText = message.guild.channels.cache.array().filter(channel => channel.type === 'text');
+                    guildChannelsText.forEach(channel => {
+                        channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
+                            SEND_MESSAGES: false,
+                            VIEW_CHANNEL: false
+
+                        })
+                            .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
+                            .catch(console.error);
+                    })
+
+                    const guildChannelsVoice = message.guild.channels.cache.array().filter(channel => channel.type === 'voice');
+                    guildChannelsVoice.forEach(channel => {
+                        channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
+                            CONNECT: false,
+                            VIEW_CHANNEL: false
+
+                        })
+                            .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
+                            .catch(console.error);
+                    })
+
+                    const embed = new MessageEmbed()
+                        .setColor(process.env.COLOR)
+                        .setTitle('Generated channel settings for role ABYSS!')
+
+                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+
+                } else {
+                    message.guild.roles.create({
+                        data: {
+                            name: 'ABYSS',
+                            color: 'BLACK',
+                        },
+                        reason: 'we needed a role for super annoying People',
+                    });
+
+
+                    const embed = new MessageEmbed()
+                        .setColor(process.env.COLOR)
+                        .setTitle('Created role ABYSS')
+
+                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+
+                }
+            } else {
+                const embed = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle('You dont have the permissions to do that')
+
+                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            }
+        }
+    }
+
     else if (message.content.startsWith(prefix + "kick")) {
         if (!message.member.hasPermission('KICK_MEMBERS')) {
             const embed = new MessageEmbed()
@@ -290,7 +401,7 @@ module.exports = async (client, message) => {
         }
     }
 
-    else if (message.content.startsWith(prefix + "mute")) {
+    else if (message.content.startsWith(prefix + "abyss")) {
         if (!message.member.hasPermission('MANAGE_ROLES')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
@@ -306,10 +417,10 @@ module.exports = async (client, message) => {
 
                 if (member) {
 
-                    member.roles.add(message.guild.roles.cache.find(r => r.name === "MUTED"))
+                    member.roles.add(message.guild.roles.cache.find(r => r.name === "ABYSS")).catch(err => console.error(err));
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
-                        .setTitle(`${user.tag} is now muted!`)
+                        .setTitle(`${user.tag} is now in the abyss!`)
 
                     message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
@@ -331,6 +442,96 @@ module.exports = async (client, message) => {
         }
     }
 
+    else if (message.content.startsWith(prefix + "surface")) {
+        if (!message.member.hasPermission('MANAGE_ROLES')) {
+            const embed = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle(`You don't have the permissions to do that!`)
+
+            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+        } else {
+            const user = message.mentions.users.first();
+
+            if (user) {
+
+                const member = message.guild.members.resolve(user);
+
+                if (member) {
+
+                    member.roles.remove(message.guild.roles.cache.find(r => r.name === "ABYSS")).catch(err => console.error(err))
+                    const embed = new MessageEmbed()
+                        .setColor(process.env.COLOR)
+                        .setTitle(`${user.tag} is no longer in the abyss!`)
+
+                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+
+                } else {
+                    const embed = new MessageEmbed()
+                        .setColor(process.env.COLOR)
+                        .setTitle(`Unknown user!`)
+
+                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                }
+            } else {
+                const embed = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle(`No users were mentioned!`)
+
+                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+
+            }
+        }
+    }
+
+    else if (message.content.startsWith(prefix + "mute")) {
+        if (!message.member.hasPermission('MANAGE_ROLES')) {
+            const embed = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle(`You don't have the permissions to do that!`)
+
+            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+        } else {
+            if (message.member.guild.roles.cache.find(role => role.name === "MUTED")) {
+                const user = message.mentions.users.first();
+
+                if (user) {
+
+                    const member = message.guild.members.resolve(user);
+
+                    if (member) {
+
+                        member.roles.add(message.guild.roles.cache.find(r => r.name === "MUTED")).catch(err => console.error(err));
+                        const embed = new MessageEmbed()
+                            .setColor(process.env.COLOR)
+                            .setTitle(`${user.tag} is now muted!`)
+
+                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+
+                    } else {
+                        const embed = new MessageEmbed()
+                            .setColor(process.env.COLOR)
+                            .setTitle(`Unknown user!`)
+
+                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    }
+                } else {
+                    const embed = new MessageEmbed()
+                        .setColor(process.env.COLOR)
+                        .setTitle(`No users were mentioned!`)
+
+                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+
+                }
+            } else {
+                const embed = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle(`Please generate the MUTED role first!`)
+
+                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            }
+        }
+    }
+
     else if (message.content.startsWith(prefix + "unmute")) {
         if (!message.member.hasPermission('MANAGE_ROLES')) {
             const embed = new MessageEmbed()
@@ -347,7 +548,7 @@ module.exports = async (client, message) => {
 
                 if (member) {
 
-                    member.roles.remove(message.guild.roles.cache.find(r => r.name === "MUTED"))
+                    member.roles.remove(message.guild.roles.cache.find(r => r.name === "MUTED")).catch(err => console.error(err));
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`${user.tag} is no longer muted!`)
@@ -458,16 +659,17 @@ module.exports = async (client, message) => {
                     { name: prefix + 'Ping', value: 'it pings you', inline: true },
                     { name: prefix + 'gengay / genstraight', value: 'generates the roles for spam/ignore', inline: true },
                     { name: prefix + 'genmute', value: 'generates the channel permissions for MUTED role', inline: true },
+                    { name: prefix + 'genabyss', value: 'generates the channel permissions for ABYSS role', inline: true },
                     { name: prefix + 'kick / ban', value: 'kicks / bans the specified user', inline: true },
                     { name: prefix + 'mute / unmute', value: 'kicks / bans the specified user', inline: true },
+                    { name: prefix + 'abyss / surface', value: 'moves a member into / out of the abyss', inline: true },
                     { name: prefix + 'delete', value: 'delete the specific number of messages', inline: true },
                     { name: prefix + 'help', value: 'helps you', inline: true },
+                    { name: prefix + 'funny', value: "It's just funny", inline: true },
                     { name: prefix + 'serverinfo', value: 'shows information about the current server', inline: true },
                     { name: prefix + 'prefix', value: 'sets the prefix for the current server', inline: true },
-
                 )
-
-            return message.channel.send(embed);
+            return message.channel.send(embed).then(m => m.delete({ timeout: 20000 })).catch(err => console.error(err));
         }
     }
 
