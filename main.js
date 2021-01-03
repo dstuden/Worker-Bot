@@ -1,13 +1,22 @@
-const discord = require("discord.js");
-const { MessageEmbed } = require('discord.js');
-const client = new discord.Client();
-require("dotenv").config();
+const { Client, Collection } = require('discord.js');
+const { config } = require('dotenv');
 const fs = require('fs');
-const { set } = require("mongoose");
-const message = require("./events/message");
-const guild = require("./models/guild");
+const mongoose = require('mongoose');
+const client = new Client();
+
+client.commands = new Collection();
+client.aliases = new Collection();
 client.mongoose = require('./utils/mongoose');
 
+client.categories = fs.readdirSync('./commands/');
+
+config({
+    path: `${__dirname}/.env`
+});
+
+['command'].forEach(handler => {
+    require(`./handlers/${handler}`)(client);
+});
 
 fs.readdir('./events', (err, files) => {
     if (err) return console.error;
@@ -20,7 +29,6 @@ fs.readdir('./events', (err, files) => {
     });
 });
 
-
-
 client.mongoose.init();
 client.login(process.env.BOT_TOKEN);
+
