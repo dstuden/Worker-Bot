@@ -17,9 +17,10 @@ module.exports = {
             if (user) {
                 const member = message.guild.members.resolve(user);
                 if (member) {
-
+                    let reason = message.content.split(' ').slice(1);
+                    reason = reason.slice(1).join(' ');
                     member
-                        .kick('I am a mod!')
+                        .kick(reason)
                         .then(() => {
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)

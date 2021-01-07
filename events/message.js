@@ -4,8 +4,16 @@ const Guild = require('../models/guild');
 const { findOne } = require('../models/guild');
 
 module.exports = async (client, message) => {
-    if (message.author.bot) return;
 
+    if (message.author.bot || !message.guild) return;
+    /*if (message.author.id === '388377435269496832') {
+        const embed = new MessageEmbed()
+            .setColor(process.env.COLOR)
+            .setTitle('Hmm, I did not quite catch that. Please try not being disabled! OMEGALUL');
+
+        return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+    }
+    */
     const settings = await Guild.findOne({
         guildID: message.guild.id
     }).catch(err => {
@@ -17,7 +25,8 @@ module.exports = async (client, message) => {
             _id: mongoose.Types.ObjectId(),
             guildID: message.guild.id,
             guildName: message.guild.name,
-            prefix: process.env.PREFIX
+            prefix: process.env.PREFIX,
+            defaultrole: ''
         })
 
         newGuild.save()

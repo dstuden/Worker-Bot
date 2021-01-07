@@ -20,10 +20,11 @@ module.exports = {
                 const member = message.guild.members.resolve(user);
 
                 if (member) {
-
+                    let reason = message.content.split(' ').slice(1);
+                    reason = reason.slice(1).join(' ');
                     member
                         .ban({
-                            reason: 'I am a mod!',
+                            reason: reason,
                         })
                         .then(() => {
                             const embed = new MessageEmbed()

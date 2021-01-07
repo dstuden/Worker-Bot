@@ -3,15 +3,15 @@ const mongoose = require('mongoose');
 const Guild = require('../../models/guild');
 
 module.exports = {
-    name: 'prefix',
+    name: 'defaultrole',
     category: 'moderation',
-    description: 'Changes the prefix for the current server.',
-    usage: `prefix`,
+    description: 'Sets the server default role.',
+    usage: `defaultrole`,
     run: async (client, message) => {
 
-        if (message.member.hasPermission("MANAGE_GUILD")) {
-            
-            const newPrefix = message.content.split(' ');
+        if (message.member.hasPermission("MANAGE_ROLES")) {
+
+            const newRole = message.content.split(' ');
 
             const settings = await Guild.findOne({
                 guildID: message.guild.id
@@ -39,28 +39,35 @@ module.exports = {
                 return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             } else {
             }
-            const prefix = settings.prefix;
+            const defaultRole = settings.defaultRole;
 
 
-            if (typeof newPrefix[1] === 'undefined') {
+            if (typeof newRole[1] === 'undefined') {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
-                    .setTitle('Enter the new prefix!');
+                    .setTitle('Enter a role!');
 
                 return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
             } else {
-                await settings.updateOne({
-                    prefix: newPrefix[1]
-                });
+                if (message.guild.roles.cache.find(role => role.name == newRole[1])) {
+                    await settings.updateOne({
+                        defaultRole: newRole[1]
+                    });
 
-                const embed = new MessageEmbed()
-                    .setColor(process.env.COLOR)
-                    .setTitle('The new prefix for this server is ' + newPrefix[1]);
+                    const embed = new MessageEmbed()
+                        .setColor(process.env.COLOR)
+                        .setTitle('The new default role for this server is ' + newRole[1]);
 
-                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                } else {
+                    const embed = new MessageEmbed()
+                        .setColor(process.env.COLOR)
+                        .setTitle('Enter a valid role!');
+
+                    return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                }
             }
-
 
         } else {
             const embed = new MessageEmbed()
@@ -69,5 +76,7 @@ module.exports = {
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         }
+
+
     }
 }

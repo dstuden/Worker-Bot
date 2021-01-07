@@ -7,7 +7,8 @@ module.exports = async (client, guild) => {
             _id: mongoose.Types.ObjectId(),
             guildID: guild.id,
             guildName: guild.name,
-            prefix: process.env.PREFIX
+            prefix: process.env.PREFIX,
+            defaultRole: ''
         });
 
         guild.save()
