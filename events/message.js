@@ -14,6 +14,7 @@ module.exports = async (client, message) => {
         return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
     }
     */
+    // ^^ This was made specifically for one person. He is quite an asshole.
     const settings = await Guild.findOne({
         guildID: message.guild.id
     }).catch(err => {
