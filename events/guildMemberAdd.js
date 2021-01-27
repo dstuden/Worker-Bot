@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Guild = require('../models/guild');
+const fs = require('fs');
 
 module.exports = async (client, member) => {
     
@@ -7,6 +8,14 @@ module.exports = async (client, member) => {
         guildID: member.guild.id
     }).catch(err => {
         console.log(err)
+    });
+
+    const user = member;
+    fs.readFile('./persistentRoles/persistentMute.txt', function (err1, dupe) {
+        if (err1) throw err1;
+        if (dupe.indexOf(user.id) >= 0) {
+            member.roles.add(member.guild.roles.cache.find(role => role.name == 'MUTED')).catch(err => console.error(err));
+        }
     });
 
     if (settings == null) {
@@ -30,10 +39,10 @@ module.exports = async (client, member) => {
     } else {
     }
 
-    if(!settings.defaultrole === '') {
-        member.roles.add(member.guild.roles.cache.find(role => role.name == settings.defaultRole)).catch(err => console.error(err));
-    } else {
+    if(settings.defaultrole === '') {
         return;
+    } else {
+        member.roles.add(member.guild.roles.cache.find(role => role.name == settings.defaultRole)).catch(err => console.error(err));
     }
     
 };

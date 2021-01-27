@@ -14,6 +14,7 @@ module.exports = {
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         } else {
             const user = message.mentions.users.first();
+            const author = message.member.user.tag;
             if (user) {
                 const member = message.guild.members.resolve(user);
                 if (member) {
@@ -25,8 +26,9 @@ module.exports = {
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`Successfully kicked ${user.tag}`)
+                                .addField(`Kicked by ${author}`, 'With the reason: ' + reason)
 
-                            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                            message.channel.send(embed).catch(err => console.error(err));
                         })
                         .catch(err => {
                             const embed = new MessageEmbed()

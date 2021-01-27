@@ -31,7 +31,7 @@ module.exports = {
 
                 talkedRecently.add(message.member.id);
                 setTimeout(() => {
-                    // Removes the user from the set after a minute
+
                     talkedRecently.delete(message.member.id);
                 }, 5000);
             }

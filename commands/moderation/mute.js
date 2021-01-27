@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const fs = require('fs');
 
 module.exports = {
     name: 'mute',
@@ -22,12 +23,29 @@ module.exports = {
 
                     if (member) {
 
-                        member.roles.add(message.guild.roles.cache.find(r => r.name === "MUTED")).catch(err => console.error(err));
-                        const embed = new MessageEmbed()
-                            .setColor(process.env.COLOR)
-                            .setTitle(`${user.tag} is now muted!`)
+                        fs.readFile('./persistentRoles/persistentMute.txt', function (err1, dupe) {
+                            if (err1) throw err1;
+                            if (dupe.indexOf(user.id) >= 0) {
+                                const embed = new MessageEmbed()
+                                    .setColor(process.env.COLOR)
+                                    .setTitle(`${user.tag} is already muted.`)
 
-                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                            }
+                            else {
+                                fs.appendFile('./persistentRoles/persistentMute.txt', user.id + `,\n`, function (err2) {
+                                    if (err2) throw err2;
+                                    console.log('Updated the mute file!');
+                                });
+
+                                member.roles.add(message.guild.roles.cache.find(r => r.name === "MUTED")).catch(err => console.error(err));
+                                const embed = new MessageEmbed()
+                                    .setColor(process.env.COLOR)
+                                    .setTitle(`${user.tag} is now muted!`)
+
+                                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                            }
+                        });
 
                     } else {
                         const embed = new MessageEmbed()

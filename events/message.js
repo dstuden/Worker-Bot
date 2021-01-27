@@ -5,16 +5,12 @@ const { findOne } = require('../models/guild');
 
 module.exports = async (client, message) => {
 
-    if (message.author.bot || !message.guild) return;
-    /*if (message.author.id === '388377435269496832') {
-        const embed = new MessageEmbed()
-            .setColor(process.env.COLOR)
-            .setTitle('Hmm, I did not quite catch that. Please try not being disabled! OMEGALUL');
+    if (message.author.bot) return;
 
-        return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+    if (!message.guild) {
+        return message.channel.send("No DM's pls!");
     }
-    */
-    // ^^ This was made specifically for one person. He is quite an asshole.
+
     const settings = await Guild.findOne({
         guildID: message.guild.id
     }).catch(err => {

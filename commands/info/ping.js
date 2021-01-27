@@ -1,4 +1,6 @@
 const { MessageEmbed } = require('discord.js');
+const talkedRecently = new Set();
+
 
 module.exports = {
     name: 'ping',
@@ -6,13 +8,27 @@ module.exports = {
     description: 'Returns bot and API latency in milliseconds.',
     usage: `ping`,
     run: async (client, message) => {
-        const msg = await message.channel.send('🏓 Pinging...');
+        if (talkedRecently.has(message.author.id)) {
+            const embed = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle('Please wait before using this command again!')
 
-        const embed = new MessageEmbed()
-        .setColor(process.env.COLOR)
-        .setTitle('🏓 Pong!')
-        .setDescription(`Bot Latency is **${Math.floor(msg.createdTimestamp - message.createdTimestamp)} ms** \nAPI Latency is **${Math.round(client.ws.ping)} ms**`);
+            message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+        } else {
+            const msg = await message.channel.send('🏓 Pinging...');
 
-        message.channel.send(embed);
+            const embed = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle('🏓 Pong!')
+                .setDescription(`Bot Latency is **${Math.floor(msg.createdTimestamp - message.createdTimestamp)} ms** \nAPI Latency is **${Math.round(client.ws.ping)} ms**`);
+
+            msg.edit(embed);
+
+            talkedRecently.add(message.member.id);
+            
+            setTimeout(() => {
+                talkedRecently.delete(message.member.id);
+            }, 10000);
+        }
     }
 }
