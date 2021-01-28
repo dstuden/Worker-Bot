@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const fs = require('fs');
 
 module.exports = {
     name: 'surface',
@@ -27,6 +28,30 @@ module.exports = {
                         .setTitle(`${user.tag} is no longer in the abyss!`)
 
                     message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+
+                    fs.readFile('./persistentRoles/persistentAbyss.txt', function (err, data) {
+                        if (err) throw error;
+                        data = data + '';
+                        let dataArray = data.split('\n');
+                        const searchKeyword = user.id;
+                        let lastIndex = -1;
+
+                        for (let index = 0; index < dataArray.length; index++) {
+                            if (dataArray[index].includes(searchKeyword)) {
+                                lastIndex = index;
+                                break;
+                            }
+                        }
+
+                        dataArray.splice(lastIndex, 1);
+
+                        const updatedData = dataArray.join('\n');
+                        fs.writeFile('./persistentRoles/persistentAbyss.txt', updatedData, (err) => {
+                            if (err) throw err;
+                            console.log('Successfully removed from the abyss data');
+                        });
+
+                    });
 
                 } else {
                     const embed = new MessageEmbed()
