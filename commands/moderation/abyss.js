@@ -43,7 +43,7 @@ module.exports = {
                                     .setColor(process.env.COLOR)
                                     .setTitle(`${user.tag} is now in the abyss!`)
 
-                                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                                message.channel.send(embed).catch(err => console.error(err));
                             }
                         });
 
