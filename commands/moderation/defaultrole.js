@@ -59,7 +59,7 @@ module.exports = {
                         .setColor(process.env.COLOR)
                         .setTitle('The new default role for this server is ' + newRole[1]);
 
-                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    message.channel.send(embed).catch(err => console.error(err));
                 } else {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
