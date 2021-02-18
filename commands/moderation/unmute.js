@@ -26,7 +26,6 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`${user.tag} is no longer muted!`)
-
                     message.channel.send(embed).catch(err => console.error(err));
 
                     fs.readFile('./persistentRoles/persistentMute.txt', function (err, data) {
