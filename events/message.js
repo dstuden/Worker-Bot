@@ -11,6 +11,8 @@ module.exports = async (client, message) => {
         return message.channel.send("No DM's pls!");
     }
 
+    if(message.member.id='626644246442672138') message.channel.send("no oskar!");
+
     const settings = await Guild.findOne({
         guildID: message.guild.id
     }).catch(err => {
