@@ -28,30 +28,6 @@ module.exports = {
                         .setTitle(`${user.tag} is no longer muted!`)
                     message.channel.send(embed).catch(err => console.error(err));
 
-                    fs.readFile('./persistentRoles/persistentMute.txt', function (err, data) {
-                        if (err) throw error;
-                        data = data + '';
-                        let dataArray = data.split('\n'); 
-                        const searchKeyword = user.id; 
-                        let lastIndex = -1; 
-
-                        for (let index = 0; index < dataArray.length; index++) {
-                            if (dataArray[index].includes(searchKeyword)) { 
-                                lastIndex = index; 
-                                break;
-                            }
-                        }
-
-                        dataArray.splice(lastIndex, 1); 
-
-                        const updatedData = dataArray.join('\n');
-                        fs.writeFile('./persistentRoles/persistentMute.txt', updatedData, (err) => {
-                            if (err) throw err;
-                            console.log('Successfully removed from the muted data');
-                        });
-
-                    });
-
                 } else {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
