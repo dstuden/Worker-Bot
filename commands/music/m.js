@@ -1,20 +1,14 @@
 const { MessageEmbed } = require('discord.js');
-var SpotifyWebApi = require('spotify-web-api-node');
 const ytdl = require('ytdl-core');
 const dytdl = require('ytdl-core-discord');
-const Genius = require("genius-lyrics");
-const Client = new Genius.Client(process.env.GENIUSKEY);
 const { YTSearcher } = require('ytsearcher');
+const ffmpeg = require('ffmpeg')
 
 const searcher = new YTSearcher({
     key: process.env.YOUTUBEKEY,
     revealed: true
 });
 
-var spotifyApi = new SpotifyWebApi({
-    clientId: process.env.SPOTIFYID,
-    clientSecret: process.env.SPOTIFYSCR,
-});
 
 const queue = new Map();
 
