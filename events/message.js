@@ -6,7 +6,6 @@ const { findOne } = require('../models/guild');
 module.exports = async (client, message) => {
 
     if (message.author.bot) return;
-
     if (!message.guild) {
         return message.channel.send("No DM's pls!");
     }
