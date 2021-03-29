@@ -54,7 +54,7 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle('❗ Enter a song ❗')
 
-                return message.channel.send(embed).catch(err => console.error(err))
+                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err))
             }
             let vc = message.member.voice.channel;
             if (!vc) {
@@ -62,7 +62,7 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle('❗ You are not in a voice channel ❗')
 
-                return message.channel.send(embed).catch(err => console.error(err))
+                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err))
             } else {
                 if (content.startsWith("https://www.youtube.com/watch")) {
                     const songInfo = await dytdl.getInfo(content);
@@ -94,13 +94,13 @@ module.exports = {
                                 const embed = new MessageEmbed()
                                     .setColor(process.env.COLOR)
                                     .setTitle('❌  Failed to join  ❌')
-                                message.channel.send(embed).catch(err => console.error(err));
+                                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                             }
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`▶️ Playing ${song.title} `)
                                 .setDescription(`${song.url}`)
-                            message.channel.send(embed).catch(err => console.error(err));
+                            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                         }
                         else {
                             serverQueue.songs.push(song);
@@ -108,14 +108,14 @@ module.exports = {
                                 .setColor(process.env.COLOR)
                                 .setTitle(`✳️ Added to queue ${song.title}`)
                                 .setDescription(`${song.url}`)
-                            return message.channel.send(embed).catch(err => console.error(err));
+                            return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                         }
                     } catch (err) {
                         console.log(err);
                         const embed = new MessageEmbed()
                             .setColor(process.env.COLOR)
                             .setTitle('❌  Failed  ❌')
-                        message.channel.send(embed).catch(err => console.error(err));
+                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                     }
                 }
 
@@ -151,13 +151,13 @@ module.exports = {
                                 const embed = new MessageEmbed()
                                     .setColor(process.env.COLOR)
                                     .setTitle('❌  Failed to join  ❌')
-                                message.channel.send(embed).catch(err => console.error(err));
+                                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                             }
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`▶️ Playing ${song.title} `)
                                 .setDescription(`${song.url}`)
-                            message.channel.send(embed).catch(err => console.error(err));
+                            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                         }
                         else {
                             serverQueue.songs.push(song);
@@ -165,14 +165,14 @@ module.exports = {
                                 .setColor(process.env.COLOR)
                                 .setTitle(`✳️ Added to queue ${song.title}`)
                                 .setDescription(`${song.url}`)
-                            return message.channel.send(embed).catch(err => console.error(err));
+                            return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                         }
                     } catch (err) {
                         console.log(err);
                         const embed = new MessageEmbed()
                             .setColor(process.env.COLOR)
                             .setTitle('❌  Failed  ❌')
-                        message.channel.send(embed).catch(err => console.error(err));
+                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                     }
                 }
             }
@@ -194,7 +194,7 @@ module.exports = {
                 .setColor(process.env.COLOR)
                 .setTitle(`▶️ Now playing ${serverQueue.songs[0].title}`)
                 .setDescription(`${serverQueue.songs[0].url}`)
-            serverQueue.txtChannel.send(embed).catch(err => console.error(err));
+            serverQueue.txtChannel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         }
         function stop(message, serverQueue) {
             if (!message.member.voice.channel)
@@ -205,7 +205,7 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle(`✅  Left VC`)
-                serverQueue.txtChannel.send(embed).catch(err => console.error(err));
+                serverQueue.txtChannel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             }
             catch (err) {
             }
@@ -222,7 +222,7 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('❌  Failed  ❌')
-                message.channel.send(embed).catch(err => console.error(err));
+                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             }
         }
 
