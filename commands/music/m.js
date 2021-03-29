@@ -9,6 +9,10 @@ const searcher = new YTSearcher({
     revealed: true
 });
 
+var spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFYID,
+    clientSecret: process.env.SPOTIFYSCR,
+});
 
 const queue = new Map();
 

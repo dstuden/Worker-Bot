@@ -18,6 +18,6 @@ module.exports = {
                 .addField('Roles', message.guild.roles.cache.size)
                 .addField('Created at', message.guild.createdAt);
 
-            return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            return message.channel.send(embed).catch(err => console.error(err));
     }
 }
