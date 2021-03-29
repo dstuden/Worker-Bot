@@ -2,16 +2,10 @@ const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
 const dytdl = require('ytdl-core-discord');
 const { YTSearcher } = require('ytsearcher');
-const ffmpeg = require('ffmpeg')
 
 const searcher = new YTSearcher({
     key: process.env.YOUTUBEKEY,
     revealed: true
-});
-
-var spotifyApi = new SpotifyWebApi({
-    clientId: process.env.SPOTIFYID,
-    clientSecret: process.env.SPOTIFYSCR,
 });
 
 const queue = new Map();
@@ -26,7 +20,7 @@ module.exports = {
         const serverQueue = queue.get(message.guild.id);
 
         let command = message.content.split(' ').slice(1);
-        command = command[0]
+        command = command[0];
         if (command === undefined) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)

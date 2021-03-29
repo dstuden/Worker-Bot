@@ -18,12 +18,16 @@ module.exports = {
                 if (user) {
 
                     const member = message.guild.members.resolve(user);
+                    const author = message.member.user.tag;
+                    let reason = message.content.split(' ').slice(1);
+                    reason = reason.slice(1).join(' ');
 
                     if (member) {
                         member.roles.add(message.guild.roles.cache.find(r => r.name === "MUTED")).catch(err => console.error(err));
                         const embed = new MessageEmbed()
                             .setColor(process.env.COLOR)
                             .setTitle(`${user.tag} is now muted!`)
+                            .addField(`Muted by ${author}`, 'With the reason: ' + reason)
                         message.channel.send(embed).catch(err => console.error(err));
                     } else {
                         const embed = new MessageEmbed()

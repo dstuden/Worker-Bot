@@ -19,6 +19,9 @@ module.exports = {
             if (user) {
 
                 const member = message.guild.members.resolve(user);
+                const author = message.member.user.tag;
+                let reason = message.content.split(' ').slice(1);
+                reason = reason.slice(1).join(' ');
 
                 if (member) {
 
@@ -26,8 +29,8 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`${user.tag} is no longer in the abyss!`)
-
-                    message.channel.send(embed).catch(err => console.error(err));
+                        .addField(`Surfaced by ${author}`, 'With the reason: ' + reason)
+                        message.channel.send(embed).catch(err => console.error(err));
 
                 } else {
                     const embed = new MessageEmbed()

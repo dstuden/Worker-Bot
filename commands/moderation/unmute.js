@@ -15,10 +15,15 @@ module.exports = {
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         } else {
             const user = message.mentions.users.first();
+            const author = message.member.user.tag;
+            let reason = message.content.split(' ').slice(1);
+            reason = reason.slice(1).join(' ');
 
             if (user) {
 
                 const member = message.guild.members.resolve(user);
+                let reason = message.content.split(' ').slice(1);
+                reason = reason.slice(1).join(' ');
 
                 if (member) {
 
@@ -26,7 +31,8 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`${user.tag} is no longer muted!`)
-                    message.channel.send(embed).catch(err => console.error(err));
+                        .addField(`Unmuted by ${author}`, 'With the reason: ' + reason)
+                        message.channel.send(embed).catch(err => console.error(err));
 
                 } else {
                     const embed = new MessageEmbed()
