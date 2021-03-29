@@ -2,6 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
 const dytdl = require('ytdl-core-discord');
 const { YTSearcher } = require('ytsearcher');
+const ffmpeg = require("ffmpeg");
 
 const searcher = new YTSearcher({
     key: process.env.YOUTUBEKEY,
