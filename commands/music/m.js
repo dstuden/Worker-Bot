@@ -1,21 +1,12 @@
 const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
-const dytdl = require('ytdl-core-discord');
-const { YTSearcher } = require('ytsearcher');
+const ytsr = require('@distube/ytsr');
 
-const stop = require('./functions/stop.js')
-const lyrics = require('./functions/lyrics.js')
-const skip = require('./functions/skip.js')
-const queueList = require('./functions/queueList.js')
-const loop = require('./functions/loop.js')
-
-let youtubeApiKey = process.env.YOUTUBEKEY.split(',');
-const randomIndex = Math.floor((Math.random() * 7));
-
-const searcher = new YTSearcher({
-    key: youtubeApiKey[randomIndex],
-    revealed: true
-});
+const stop = require('./functions/stop.js');
+const lyrics = require('./functions/lyrics.js');
+const skip = require('./functions/skip.js');
+const queueList = require('./functions/queueList.js');
+const loop = require('./functions/loop.js');
 
 const queue = new Map();
 var queueIndex = 0;
@@ -98,7 +89,7 @@ module.exports = {
                 return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err))
             } else {
                 if (content.startsWith("https://www.youtube.com/watch")) {
-                    const songInfo = await dytdl.getInfo(content);
+                    const songInfo = await ytdl.getInfo(content);
                     try {
                         let song = {
                             title: songInfo.videoDetails.title,
@@ -159,8 +150,12 @@ module.exports = {
 
                 else {
                     try {
-                        let result = await searcher.search(content, { type: "video" });
-                        const songInfo = await dytdl.getInfo(result.first.url);
+                        var media=[];
+                        let result = await ytsr(content, {limit: 1 }).then(x => {
+                            let song = x.items[0];
+                            media=song.url
+                        })
+                        const songInfo = await ytdl.getInfo(media);
 
                         let song = {
                             title: songInfo.videoDetails.title,
