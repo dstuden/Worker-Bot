@@ -8,8 +8,8 @@ module.exports=function queueList(message, serverQueue) {
             .setColor(process.env.COLOR)
             .setTitle('⏭️  Queue')
             .setFooter('PogWorks Studios ©️ 2021')
-        for (var i = 0; (i < serverQueue.songs.length) && (i < 5); i++) {
-            embed.addField('‏‏‎ ‎', `${i + 1}. [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})`);
+        for (var i = 0; (i < serverQueue.songs.length) && (i < 10); i++) {
+            embed.addField('‏‏‎ ‎', `${i + 1}. [${serverQueue.songs[i].title}](${serverQueue.songs[i].url})...`);
         }
 
         message.channel.send(embed).then(m => m.delete({ timeout: 30000 })).catch(err => console.error(err));
