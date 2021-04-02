@@ -3,13 +3,14 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'kick',
     category: 'moderation',
-    description: 'Kicks a user.',
+    description: 'kicks a user',
     usage: `kick`,
     run: async (client, message) => {
         if (!message.member.hasPermission('KICK_MEMBERS')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle(`You don't have the permissions to do that!`)
+                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         } else {
@@ -27,6 +28,7 @@ module.exports = {
                                 .setColor(process.env.COLOR)
                                 .setTitle(`Successfully kicked ${user.tag}`)
                                 .addField(`Kicked by ${author}`, 'With the reason: ' + reason)
+                                .setFooter('PogWorks Studios ©️ 2021')
 
                             message.channel.send(embed).catch(err => console.error(err));
                         })
@@ -34,6 +36,7 @@ module.exports = {
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`Failed to kick ${user.tag}`)
+                                .setFooter('PogWorks Studios ©️ 2021')
 
                             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
@@ -43,6 +46,7 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`Unknown user!`)
+                        .setFooter('PogWorks Studios ©️ 2021')
 
                     message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                 }
@@ -51,6 +55,7 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle(`No users were mentioned!`)
+                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 10000 }))
             }

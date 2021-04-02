@@ -3,13 +3,14 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'mute',
     category: 'moderation',
-    description: 'Mutes a user.',
+    description: 'mutes a user',
     usage: `mute`,
     run: async (client, message) => {
         if (!message.member.hasPermission('MANAGE_ROLES')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle(`You don't have the permissions to do that!`)
+                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         } else {
@@ -28,17 +29,23 @@ module.exports = {
                             .setColor(process.env.COLOR)
                             .setTitle(`${user.tag} is now muted!`)
                             .addField(`Muted by ${author}`, 'With the reason: ' + reason)
+                            .setFooter('PogWorks Studios ©️ 2021')
+
                         message.channel.send(embed).catch(err => console.error(err));
                     } else {
                         const embed = new MessageEmbed()
                             .setColor(process.env.COLOR)
                             .setTitle(`Unknown user!`)
+                            .setFooter('PogWorks Studios ©️ 2021')
+
                         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                     }
                 } else {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`No users were mentioned!`)
+                        .setFooter('PogWorks Studios ©️ 2021')
+
                     message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
                 }
@@ -46,6 +53,8 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle(`Please generate the MUTED role first!`)
+                    .setFooter('PogWorks Studios ©️ 2021')
+
                 message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             }
         }

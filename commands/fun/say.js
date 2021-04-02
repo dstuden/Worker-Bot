@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'say',
     category: 'fun',
-    description: 'say things',
+    description: 'say things + you can use "say embed" to use embeds',
     usage: 'say',
     run: async (client, message) => {
         let content = message.content.split(' ').slice(1).join(' ');

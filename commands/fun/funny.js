@@ -4,7 +4,7 @@ const fs = require('fs');
 module.exports = {
     name: 'funny',
     category: 'fun',
-    description: 'Returns a funny',
+    description: 'returns a funny',
     usage: `funny`,
     run: async (client, message) => {
         function getRandomLine(filename) {
@@ -17,7 +17,8 @@ module.exports = {
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('Peepo Pog Wow!')
-            .setImage(the_random_line_text);
+            .setImage(the_random_line_text)
+            .setFooter('PogWorks Studios ©️ 2021')
 
         message.channel.send(embed);
     }

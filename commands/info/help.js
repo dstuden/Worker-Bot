@@ -5,11 +5,11 @@ const { stripIndents } = require('common-tags');
 
 module.exports = {
     name: 'help',
-    aliases: ['c'],
     category: 'info',
-    description: 'Displays a full list of bot commands.',
+    description: 'displays a full list of bot commands',
     usage: `help`,
     run: async (client, message) => {
+
         await Guild.findOne({
             guildID: message.guild.id
         }, (err, guild) => {
@@ -22,10 +22,10 @@ module.exports = {
                     prefix: process.env.PREFIX,
                     logChannelID: null
                 });
-    
+
                 newGuild.save()
-                .then(result => console.log(result))
-                .catch(err => console.error(err));
+                    .then(result => console.log(result))
+                    .catch(err => console.error(err));
             }
         });
 
@@ -39,15 +39,15 @@ async function getAll(client, message) {
     });
 
     const embed = new MessageEmbed()
-    .setColor(process.env.COLOR)
-    .setTitle('Available commands')
-    .setThumbnail(client.user.avatarURL())
-    .setFooter('PogWorks Studios ©️ 2021')
-    
+        .setColor(process.env.COLOR)
+        .setTitle('Available commands')
+        .setThumbnail(client.user.avatarURL())
+        .setFooter('PogWorks Studios ©️ 2021')
+
     const commands = (category) => {
         return client.commands
             .filter(cmd => cmd.category === category)
-            .map(cmd => `- \`${(guildDB.prefix) + cmd.name}\``)
+            .map(cmd => `- ${(guildDB.prefix) + cmd.name}\n \`${cmd.description}\``)
             .join('\n');
     }
 
@@ -55,5 +55,7 @@ async function getAll(client, message) {
         .map(idk => stripIndents`**${idk[0].toLowerCase() + idk.slice(1)}** \n${commands(idk)}`)
         .reduce((string, category) => `${string}\n${category}`);
 
-    return message.channel.send(embed.setDescription(`\n\n${info}`));
+    return message.author.send(embed.setDescription(`\n\n${info}`)).catch(err =>
+        message.channel.send(embed.setDescription(`\n\n${info}`)))
+
 }

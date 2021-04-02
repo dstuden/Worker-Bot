@@ -3,13 +3,15 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'abyss',
     category: 'moderation',
-    description: 'Sends a user into the abyss.',
+    description: 'sends a user into the abyss',
     usage: `abyss`,
     run: async (client, message) => {
         if (!message.member.hasPermission('MANAGE_ROLES')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle(`You don't have the permissions to do that!`)
+                .setFooter('PogWorks Studios ©️ 2021')
+
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         } else {
@@ -30,6 +32,8 @@ module.exports = {
                             .setColor(process.env.COLOR)
                             .setTitle(`${user.tag} is now in the abyss!`)
                             .addField(`Sent into the abyss by ${author}`, 'With the reason: ' + reason)
+                            .setFooter('PogWorks Studios ©️ 2021')
+
 
                         message.channel.send(embed).catch(err => console.error(err));
 
@@ -37,6 +41,8 @@ module.exports = {
                         const embed = new MessageEmbed()
                             .setColor(process.env.COLOR)
                             .setTitle(`Unknown user!`)
+                            .setFooter('PogWorks Studios ©️ 2021')
+
 
                         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                     }
@@ -44,6 +50,8 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`No users were mentioned!`)
+                        .setFooter('PogWorks Studios ©️ 2021')
+
                     message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
                 }
@@ -52,6 +60,8 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle(`Please generate the ABYSS role first!`)
+                    .setFooter('PogWorks Studios ©️ 2021')
+
                 message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             }
         }

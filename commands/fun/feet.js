@@ -14,6 +14,7 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Please wait before using this command again!')
+                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
                 return;
@@ -24,6 +25,7 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('No query!')
+                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
                 return;
@@ -35,6 +37,7 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Nothing found!')
+                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
                 return;
@@ -47,6 +50,7 @@ module.exports = {
                 .setColor(process.env.COLOR)
                 .setTitle('Enjoy :wink: ')
                 .setImage(`${pics[random]}`)
+                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).catch(err => console.error(err));
 
@@ -58,6 +62,7 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Error!')
+                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
         }

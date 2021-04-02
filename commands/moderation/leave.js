@@ -10,13 +10,17 @@ module.exports = {
         if (message.member.hasPermission('MANAGE_GUILD' || 'KICK_MEMBERS')) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
-                .setTitle('I have left the server. Sadge...')
+                .setTitle('Leaving the server. Sadge...')
+                .setFooter('PogWorks Studios ©️ 2021')
+
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             message.guild.leave();
         } else {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that!')
+                .setFooter('PogWorks Studios ©️ 2021')
+
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         }
     }

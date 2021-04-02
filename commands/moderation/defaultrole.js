@@ -5,7 +5,7 @@ const Guild = require('../../models/guild');
 module.exports = {
     name: 'defaultrole',
     category: 'moderation',
-    description: 'Sets the server default role.',
+    description: 'sets the server default role',
     usage: `defaultrole`,
     run: async (client, message) => {
 
@@ -34,7 +34,8 @@ module.exports = {
 
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
-                    .setTitle('This server was not in my database! You can now use commands!');
+                    .setTitle('This server was not in my database! You can now use commands!')
+                    .setFooter('PogWorks Studios ©️ 2021')
 
                 return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             } else {
@@ -45,7 +46,8 @@ module.exports = {
             if (typeof newRole[1] === 'undefined') {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
-                    .setTitle('Enter a role!');
+                    .setTitle('Enter a role!')
+                    .setFooter('PogWorks Studios ©️ 2021')
 
                 return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
@@ -57,13 +59,15 @@ module.exports = {
 
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
-                        .setTitle('The new default role for this server is ' + newRole[1]);
+                        .setTitle('The new default role for this server is ' + newRole[1])
+                        .setFooter('PogWorks Studios ©️ 2021')
 
                     message.channel.send(embed).catch(err => console.error(err));
                 } else {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
-                        .setTitle('Enter a valid role!');
+                        .setTitle('Enter a valid role!')
+                        .setFooter('PogWorks Studios ©️ 2021')
 
                     return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                 }
@@ -72,7 +76,8 @@ module.exports = {
         } else {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
-                .setTitle('You dont have the permissions to do that!');
+                .setTitle('You dont have the permissions to do that!')
+                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         }

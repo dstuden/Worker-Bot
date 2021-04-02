@@ -5,7 +5,7 @@ const talkedRecently = new Set();
 module.exports = {
     name: 'purge',
     category: 'moderation',
-    description: 'Deletes messages.',
+    description: 'deletes messages',
     usage: `purge`,
     run: async (client, message) => {
         if (message.member.hasPermission('MANAGE_MESSAGES')) {
@@ -13,6 +13,7 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Please wait before using this command again!')
+                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
             } else {
@@ -23,7 +24,8 @@ module.exports = {
 
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
-                        .setTitle('Failed!');
+                        .setTitle('Failed!')
+                        .setFooter('PogWorks Studios ©️ 2021')
 
                     message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
 
@@ -39,6 +41,7 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that')
+                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
         }

@@ -11,7 +11,7 @@ module.exports = (client) => {
                 client.commands.set(pull.name, pull);
                 console.log(file + ' Loaded!');
             } else {
-                commands.log(file + ' Command failed to load, please check your work again!');
+                console.log(file + ' Command failed to load, please check your work again!');
                 continue;
             }
 
