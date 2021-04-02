@@ -234,6 +234,7 @@ module.exports = {
                 .on('finish', () => {
                     if (serverQueue.songs.length - queueIndex === 1) {
                         if (serverQueue.looping === true) {
+                            queueIndex=0;
                             serverQueue.songs.forEach(loopSong => {
                                 serverQueue.songs.push(loopSong);
                             })
