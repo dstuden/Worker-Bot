@@ -5,7 +5,8 @@ module.exports = function stop(message, serverQueue) {
         return message.channel.send("You need to join the voice chat first!");
     try {
         serverQueue.songs = [];
-        serverQueue.connection.dispatcher.end();
+        serverQueue.looping=false;
+        serverQueue.vChannel.leave();
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle(`✅  Disconected`)

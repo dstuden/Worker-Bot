@@ -2,10 +2,12 @@ const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
 const dytdl = require('ytdl-core-discord');
 const { YTSearcher } = require('ytsearcher');
-const stop = require('./stop.js')
-const lyrics = require('./lyrics.js')
-const skip = require('./skip.js')
-const queueList = require('./queueList.js')
+
+const stop = require('./functions/stop.js')
+const lyrics = require('./functions/lyrics.js')
+const skip = require('./functions/skip.js')
+const queueList = require('./functions/queueList.js')
+const loop = require('./functions/loop.js')
 
 let youtubeApiKey = process.env.YOUTUBEKEY.split(',');
 const randomIndex = Math.floor((Math.random() * 7));
@@ -16,6 +18,7 @@ const searcher = new YTSearcher({
 });
 
 const queue = new Map();
+var queueIndex = 0;
 
 module.exports = {
     name: 'm',
@@ -25,6 +28,7 @@ module.exports = {
     run: async (client, message) => {
 
         const serverQueue = queue.get(message.guild.id);
+        var loopQueue = [];
 
         let command = message.content.split(' ').slice(1);
         command = command[0];
@@ -59,18 +63,20 @@ module.exports = {
                 stop(message, serverQueue);
                 break;
             case 's':
-                skip(message, serverQueue);
+                skip(message, serverQueue, queueIndex);
                 break;
-            case 'stop':
-                skip(message, serverQueue);
+            case 'skip':
+                skip(message, serverQueue, queueIndex);
                 break;
             case 'lyrics':
-                lyrics(message, serverQueue);
+                lyrics(message, serverQueue, queueIndex);
                 break;
             case 'queue':
-                queueList(message, serverQueue);
+                queueList(message, serverQueue, queueIndex);
                 break;
-
+            case 'loop':
+                loop(message, serverQueue, loopQueue);
+                break;
         }
 
         async function execute(message, serverQueue) {
@@ -108,7 +114,8 @@ module.exports = {
                                 connection: null,
                                 songs: [],
                                 volume: 10,
-                                playing: true
+                                playing: true,
+                                looping: false
                             };
                             queue.set(message.guild.id, queueConstructor);
 
@@ -117,7 +124,7 @@ module.exports = {
                             try {
                                 let connection = await vc.join();
                                 queueConstructor.connection = connection;
-                                play(message.guild, queueConstructor.songs[0]);
+                                play(message.guild, queueConstructor.songs[queueIndex]);
                             } catch (err) {
                                 console.log(err);
                                 const embed = new MessageEmbed()
@@ -130,6 +137,7 @@ module.exports = {
                         }
                         else {
                             serverQueue.songs.push(song);
+                            serverQueue.looping=false;
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`✳️ Added to queue ${song.title}`)
@@ -168,7 +176,9 @@ module.exports = {
                                 connection: null,
                                 songs: [],
                                 volume: 10,
-                                playing: true
+                                playing: true,
+                                looping: false
+
                             };
                             queue.set(message.guild.id, queueConstructor);
 
@@ -190,6 +200,7 @@ module.exports = {
                         }
                         else {
                             serverQueue.songs.push(song);
+                            serverQueue.looping=false;
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`✳️ Added to queue ${song.title}`)
@@ -215,18 +226,37 @@ module.exports = {
             if (!song) {
                 serverQueue.vChannel.leave();
                 queue.delete(guild.id);
+                queueIndex = 0;
                 return;
             }
             const dispatcher = serverQueue.connection
                 .play(ytdl(song.url))
                 .on('finish', () => {
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0]);
+                    if (serverQueue.songs.length - queueIndex === 1) {
+                        if (serverQueue.looping === true) {
+                            serverQueue.songs.forEach(loopSong => {
+                                serverQueue.songs.push(loopSong);
+                            })
+                        }
+                        else if (serverQueue.looping === false) {
+                            serverQueue.songs=[];
+                        }
+
+                        queueIndex++;
+                        play(guild, serverQueue.songs[queueIndex]);
+                    }
+                    else if (serverQueue.songs.length - queueIndex < 1) {
+                        serverQueue.connection.dispatcher.end();
+                    }
+                    else {
+                        queueIndex++;
+                        play(guild, serverQueue.songs[queueIndex]);
+                    }
                 })
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
-                .setTitle(`▶️ Now playing ${serverQueue.songs[0].title}`)
-                .setDescription(`${serverQueue.songs[0].url}`)
+                .setTitle(`▶️ Now playing ${serverQueue.songs[queueIndex].title}`)
+                .setDescription(`${serverQueue.songs[queueIndex].url}`)
                 .setFooter('PogWorks Studios ©️ 2021')
 
             serverQueue.txtChannel.send(embed).then(m => m.delete({ timeout: 20000 })).catch(err => console.error(err));
