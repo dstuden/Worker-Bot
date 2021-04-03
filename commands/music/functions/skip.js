@@ -12,6 +12,7 @@ module.exports = function skip(message, serverQueue, queueIndex) {
 
     }
     catch (err) {
+        console.log(err);
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('❌  Failed  ❌')

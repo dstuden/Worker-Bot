@@ -34,11 +34,11 @@ module.exports = {
                 .addField(`\`${process.env.PREFIX}m queue\``, 'disconect')
                 .setFooter('PogWorks Studios ©️ 2021')
 
-            return message.channel.send(embed).catch(err => console.error(err))
+            return message.channel.send(embed).catch(err => console.error(err));
         }
 
         let content = message.content.split(' ').slice(1);
-        content = content.slice(1).join(' ')
+        content = content.slice(1).join(' ');
 
         switch (command) {
             case 'p':
@@ -77,7 +77,7 @@ module.exports = {
                     .setTitle('❗ Enter a song ❗')
                     .setFooter('PogWorks Studios ©️ 2021')
 
-                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err))
+                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             }
             let vc = message.member.voice.channel;
             if (!vc) {
@@ -86,7 +86,7 @@ module.exports = {
                     .setTitle('❗ You are not in a voice channel ❗')
                     .setFooter('PogWorks Studios ©️ 2021')
 
-                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err))
+                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             } else {
                 if (content.startsWith("https://www.youtube.com/watch")) {
                     const songInfo = await ytdl.getInfo(content);
@@ -122,7 +122,6 @@ module.exports = {
                                     .setColor(process.env.COLOR)
                                     .setTitle('❌  Failed to join  ❌')
                                     .setFooter('PogWorks Studios ©️ 2021')
-
                                 message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                             }
                         }
@@ -134,7 +133,6 @@ module.exports = {
                                 .setTitle(`✳️ Added to queue ${song.title}`)
                                 .setDescription(`${song.url}`)
                                 .setFooter('PogWorks Studios ©️ 2021')
-
                             return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                         }
                     } catch (err) {
@@ -143,7 +141,6 @@ module.exports = {
                             .setColor(process.env.COLOR)
                             .setTitle('❌  Failed  ❌')
                             .setFooter('PogWorks Studios ©️ 2021')
-
                         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                     }
                 }
@@ -189,7 +186,6 @@ module.exports = {
                                     .setColor(process.env.COLOR)
                                     .setTitle('❌  Failed to join  ❌')
                                     .setFooter('PogWorks Studios ©️ 2021')
-
                                 message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                             }
                         }
@@ -201,7 +197,6 @@ module.exports = {
                                 .setTitle(`✳️ Added to queue ${song.title}`)
                                 .setDescription(`${song.url}`)
                                 .setFooter('PogWorks Studios ©️ 2021')
-
                             return message.channel.send(embed).then(m => m.delete({ timeout: 20000 })).catch(err => console.error(err));
                         }
                     } catch (err) {
@@ -210,7 +205,6 @@ module.exports = {
                             .setColor(process.env.COLOR)
                             .setTitle('❌  Failed  ❌')
                             .setFooter('PogWorks Studios ©️ 2021')
-
                         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                     }
                 }
@@ -228,6 +222,7 @@ module.exports = {
                 .play(ytdl(song.url))
                 .on('finish', () => {
                     if (serverQueue.songs.length - queueIndex === 1) {
+
                         if (serverQueue.looping === true) {
                             queueIndex=0;
                             serverQueue.songs.forEach(loopSong => {
@@ -240,6 +235,7 @@ module.exports = {
 
                         queueIndex++;
                         play(guild, serverQueue.songs[queueIndex]);
+                        
                     }
                     else if (serverQueue.songs.length - queueIndex < 1) {
                         serverQueue.connection.dispatcher.end();
