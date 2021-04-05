@@ -1,12 +1,13 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports = function stop(message, serverQueue) {
-    if (!message.member.voice.channel)
-        return message.channel.send("You need to join the voice chat first!");
+module.exports = function stop(message, serverQueue, song) {
     try {
-        serverQueue.songs = [];
-        serverQueue.looping=false;
-        serverQueue.vChannel.leave();
+        if (!message.member.voice.channel)
+            return message.channel.send("You need to join the voice chat first!");
+
+        song = [];
+        serverQueue.connection.dispatcher.end();
+
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle(`✅  Disconected`)

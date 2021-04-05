@@ -1,6 +1,8 @@
 const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
 const ytsr = require('@distube/ytsr');
+var { getTracks, getPreview } = require("spotify-url-info");
+var ytpl = require('ytpl');
 
 const stop = require('./functions/stop.js');
 const lyrics = require('./functions/lyrics.js');
@@ -48,16 +50,16 @@ module.exports = {
                 execute(message, serverQueue);
                 break;
             case 'dc':
-                stop(message, serverQueue);
+                stop(message, serverQueue, serverQueue.songs);
                 break;
             case 'disconect':
-                stop(message, serverQueue);
+                stop(message, serverQueue, serverQueue.songs);
                 break;
             case 's':
-                skip(message, serverQueue, queueIndex);
+                skip(message, serverQueue);
                 break;
             case 'skip':
-                skip(message, serverQueue, queueIndex);
+                skip(message, serverQueue);
                 break;
             case 'lyrics':
                 lyrics(message, serverQueue, queueIndex);
@@ -127,7 +129,81 @@ module.exports = {
                         }
                         else {
                             serverQueue.songs.push(song);
-                            serverQueue.looping=false;
+                            serverQueue.looping = false;
+                            const embed = new MessageEmbed()
+                                .setColor(process.env.COLOR)
+                                .setTitle(`✳️ Added to queue ${song.title}`)
+                                .setDescription(`${song.url}`)
+                                .setFooter('PogWorks Studios ©️ 2021')
+                            return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                        }
+                    } catch (err) {
+                        console.log(err);
+                        const embed = new MessageEmbed()
+                            .setColor(process.env.COLOR)
+                            .setTitle('❌  Failed  ❌')
+                            .setFooter('PogWorks Studios ©️ 2021')
+                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    }
+                }
+
+                else if (content.startsWith("https://www.youtube.com/playlist")) {
+                    const playlist = await ytpl(content);
+                    const result = playlist.items;
+                    result.forEach(song => {
+                        console.log(song.url)
+                        playlistResolver(song.url, vc);
+                    })
+                }
+
+                else if (content.startsWith("https://open.spotify.com/track/")) {
+                    const result = await getPreview(content);
+                    const search = result.title + " " + result.artist;
+
+                    let item = await ytsr(search, { limit: 1 }).then(x => {
+                        let song = x.items[0];
+                        media = song.url
+                    })
+
+                    const songInfo = await ytdl.getInfo(media);
+                    try {
+                        let song = {
+                            title: songInfo.videoDetails.title,
+                            url: songInfo.videoDetails.video_url,
+                            name: songInfo.videoDetails.media.song,
+                            artist: songInfo.videoDetails.media.artist
+                        };
+
+                        if (!serverQueue) {
+                            const queueConstructor = {
+                                txtChannel: message.channel,
+                                vChannel: vc,
+                                connection: null,
+                                songs: [],
+                                volume: 10,
+                                playing: true,
+                                looping: false
+                            };
+                            queue.set(message.guild.id, queueConstructor);
+
+                            queueConstructor.songs.push(song);
+
+                            try {
+                                let connection = await vc.join();
+                                queueConstructor.connection = connection;
+                                play(message.guild, queueConstructor.songs[queueIndex]);
+                            } catch (err) {
+                                console.log(err);
+                                const embed = new MessageEmbed()
+                                    .setColor(process.env.COLOR)
+                                    .setTitle('❌  Failed to join  ❌')
+                                    .setFooter('PogWorks Studios ©️ 2021')
+                                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                            }
+                        }
+                        else {
+                            serverQueue.songs.push(song);
+                            serverQueue.looping = false;
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`✳️ Added to queue ${song.title}`)
@@ -147,10 +223,10 @@ module.exports = {
 
                 else {
                     try {
-                        var media=[];
-                        let result = await ytsr(content, {limit: 1 }).then(x => {
+                        var media = [];
+                        let result = await ytsr(content, { limit: 1 }).then(x => {
                             let song = x.items[0];
-                            media=song.url
+                            media = song.url
                         })
                         const songInfo = await ytdl.getInfo(media);
 
@@ -191,7 +267,7 @@ module.exports = {
                         }
                         else {
                             serverQueue.songs.push(song);
-                            serverQueue.looping=false;
+                            serverQueue.looping = false;
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`✳️ Added to queue ${song.title}`)
@@ -210,48 +286,111 @@ module.exports = {
                 }
             }
         }
+
         function play(guild, song) {
-            const serverQueue = queue.get(guild.id);
-            if (!song) {
-                serverQueue.vChannel.leave();
-                queue.delete(guild.id);
-                queueIndex = 0;
-                return;
+            try {
+                const serverQueue = queue.get(guild.id);
+                if (!song) {
+                    serverQueue.vChannel.leave();
+                    queue.delete(guild.id);
+                    queueIndex = 0;
+                    return;
+                }
+                const dispatcher = serverQueue.connection
+                    .play(ytdl(song.url))
+                    .on('finish', () => {
+                        if (serverQueue.songs.length - queueIndex === 1) {
+
+                            if (serverQueue.looping === true) {
+                                queueIndex = 0;
+                                serverQueue.songs.forEach(loopSong => {
+                                    serverQueue.songs.push(loopSong);
+                                })
+                            }
+                            else if (serverQueue.looping === false) {
+                                serverQueue.songs = [];
+                            }
+
+                            queueIndex++;
+                            play(guild, serverQueue.songs[queueIndex]);
+
+                        }
+                        else if (serverQueue.songs.length - queueIndex < 1) {
+                            serverQueue.connection.dispatcher.end();
+                        }
+                        else {
+                            queueIndex++;
+                            play(guild, serverQueue.songs[queueIndex]);
+                        }
+                    })
+                const embed = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle(`▶️ Now playing ${serverQueue.songs[queueIndex].title}`)
+                    .setDescription(`${serverQueue.songs[queueIndex].url}`)
+                    .setFooter('PogWorks Studios ©️ 2021')
+
+                serverQueue.txtChannel.send(embed).then(m => m.delete({ timeout: 20000 })).catch(err => console.error(err));
             }
-            const dispatcher = serverQueue.connection
-                .play(ytdl(song.url))
-                .on('finish', () => {
-                    if (serverQueue.songs.length - queueIndex === 1) {
+            catch (err) {
+                console.log(err);
+            }
+        }
 
-                        if (serverQueue.looping === true) {
-                            queueIndex=0;
-                            serverQueue.songs.forEach(loopSong => {
-                                serverQueue.songs.push(loopSong);
-                            })
-                        }
-                        else if (serverQueue.looping === false) {
-                            serverQueue.songs=[];
-                        }
+        async function playlistResolver(song, vc) {
+            const songInfo = await ytdl.getInfo(song);
+            try {
+                let song = {
+                    title: songInfo.videoDetails.title,
+                    url: songInfo.videoDetails.video_url,
+                    name: songInfo.videoDetails.media.song,
+                    artist: songInfo.videoDetails.media.artist
+                };
 
-                        queueIndex++;
-                        play(guild, serverQueue.songs[queueIndex]);
-                        
-                    }
-                    else if (serverQueue.songs.length - queueIndex < 1) {
-                        serverQueue.connection.dispatcher.end();
-                    }
-                    else {
-                        queueIndex++;
-                        play(guild, serverQueue.songs[queueIndex]);
-                    }
-                })
-            const embed = new MessageEmbed()
-                .setColor(process.env.COLOR)
-                .setTitle(`▶️ Now playing ${serverQueue.songs[queueIndex].title}`)
-                .setDescription(`${serverQueue.songs[queueIndex].url}`)
-                .setFooter('PogWorks Studios ©️ 2021')
+                if (!serverQueue) {
+                    const queueConstructor = {
+                        txtChannel: message.channel,
+                        vChannel: vc,
+                        connection: null,
+                        songs: [],
+                        volume: 10,
+                        playing: true,
+                        looping: false
+                    };
+                    queue.set(message.guild.id, queueConstructor);
 
-            serverQueue.txtChannel.send(embed).then(m => m.delete({ timeout: 20000 })).catch(err => console.error(err));
+                    queueConstructor.songs.push(song);
+
+                    try {
+                        let connection = await vc.join();
+                        queueConstructor.connection = connection;
+                        play(message.guild, queueConstructor.songs[queueIndex]);
+                    } catch (err) {
+                        console.log(err);
+                        const embed = new MessageEmbed()
+                            .setColor(process.env.COLOR)
+                            .setTitle('❌  Failed to join  ❌')
+                            .setFooter('PogWorks Studios ©️ 2021')
+                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    }
+                }
+                else {
+                    serverQueue.songs.push(song);
+                    serverQueue.looping = false;
+                }
+                const embed = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle(`✳️ Added ${song.length} to queue`)
+                    .setDescription(`${song.url}`)
+                    .setFooter('PogWorks Studios ©️ 2021')
+                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            } catch (err) {
+                console.log(err);
+                const embed = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle('❌  Failed  ❌')
+                    .setFooter('PogWorks Studios ©️ 2021')
+                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            }
         }
     }
 }

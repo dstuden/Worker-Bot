@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports = function skip(message, serverQueue, queueIndex) {
+module.exports = function skip(message, serverQueue) {
     try {
         if (!message.member.voice.channel)
             return message.channel.send("You need to join the voice chat first");
@@ -8,7 +8,6 @@ module.exports = function skip(message, serverQueue, queueIndex) {
             return message.channel.send("There is nothing to skip!");
 
         serverQueue.connection.dispatcher.end();
-        queueIndex+=1;
 
     }
     catch (err) {
