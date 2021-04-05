@@ -106,7 +106,7 @@ module.exports = {
                                 vChannel: vc,
                                 connection: null,
                                 songs: [],
-                                volume: 10,
+                                volume: 5,
                                 playing: true,
                                 looping: false
                             };
@@ -148,13 +148,72 @@ module.exports = {
                 }
 
                 else if (content.startsWith("https://www.youtube.com/playlist")) {
-                    const playlist = await ytpl(content);
-                    const result = playlist.items;
-                    result.forEach(song => {
-                        console.log(song.url)
-                        playlistResolver(song.url, vc);
-                    })
+                    try {
+                        const playlist = await ytpl(content);
+                        const media = playlist.items;
+                        var x;
+                        console.log(media)
+                        for (x of media) {
+
+                            console.log(x.shortUrl);
+                            const songInfo = await ytdl.getInfo(x.shortUrl);
+
+
+                            let song = {
+                                title: songInfo.videoDetails.title,
+                                url: songInfo.videoDetails.video_url,
+                                name: songInfo.videoDetails.media.song,
+                                artist: songInfo.videoDetails.media.artist
+                            };
+
+                            if (!serverQueue) {
+                                const queueConstructor = {
+                                    txtChannel: message.channel,
+                                    vChannel: vc,
+                                    connection: null,
+                                    songs: [],
+                                    volume: 5,
+                                    playing: true,
+                                    looping: false
+                                };
+                                queue.set(message.guild.id, queueConstructor);
+
+                                queueConstructor.songs.push(song);
+
+                                try {
+                                    let connection = await vc.join();
+                                    queueConstructor.connection = connection;
+                                    play(message.guild, queueConstructor.songs[queueIndex]);
+                                } catch (err) {
+                                    console.log(err);
+                                    const embed = new MessageEmbed()
+                                        .setColor(process.env.COLOR)
+                                        .setTitle('❌  Failed to join  ❌')
+                                        .setFooter('PogWorks Studios ©️ 2021')
+                                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                                }
+                            }
+                            else {
+                                serverQueue.songs.push(song);
+                                return serverQueue.looping = false;
+                            }
+                        }
+                        const embed = new MessageEmbed()
+                            .setColor(process.env.COLOR)
+                            .setTitle(`✳️ Added ${media.length} songs to queue`)
+                            .setFooter('PogWorks Studios ©️ 2021')
+                        return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+
+                    } catch (err) {
+                        console.log(err);
+                        const embed = new MessageEmbed()
+                            .setColor(process.env.COLOR)
+                            .setTitle('❌  Failed  ❌')
+                            .setFooter('PogWorks Studios ©️ 2021')
+                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    }
                 }
+
 
                 else if (content.startsWith("https://open.spotify.com/track/")) {
                     const result = await getPreview(content);
@@ -180,7 +239,7 @@ module.exports = {
                                 vChannel: vc,
                                 connection: null,
                                 songs: [],
-                                volume: 10,
+                                volume: 5,
                                 playing: true,
                                 looping: false
                             };
@@ -243,7 +302,7 @@ module.exports = {
                                 vChannel: vc,
                                 connection: null,
                                 songs: [],
-                                volume: 10,
+                                volume: 5,
                                 playing: true,
                                 looping: false
 
@@ -333,63 +392,6 @@ module.exports = {
             }
             catch (err) {
                 console.log(err);
-            }
-        }
-
-        async function playlistResolver(song, vc) {
-            const songInfo = await ytdl.getInfo(song);
-            try {
-                let song = {
-                    title: songInfo.videoDetails.title,
-                    url: songInfo.videoDetails.video_url,
-                    name: songInfo.videoDetails.media.song,
-                    artist: songInfo.videoDetails.media.artist
-                };
-
-                if (!serverQueue) {
-                    const queueConstructor = {
-                        txtChannel: message.channel,
-                        vChannel: vc,
-                        connection: null,
-                        songs: [],
-                        volume: 10,
-                        playing: true,
-                        looping: false
-                    };
-                    queue.set(message.guild.id, queueConstructor);
-
-                    queueConstructor.songs.push(song);
-
-                    try {
-                        let connection = await vc.join();
-                        queueConstructor.connection = connection;
-                        play(message.guild, queueConstructor.songs[queueIndex]);
-                    } catch (err) {
-                        console.log(err);
-                        const embed = new MessageEmbed()
-                            .setColor(process.env.COLOR)
-                            .setTitle('❌  Failed to join  ❌')
-                            .setFooter('PogWorks Studios ©️ 2021')
-                        message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
-                    }
-                }
-                else {
-                    serverQueue.songs.push(song);
-                    serverQueue.looping = false;
-                }
-                const embed = new MessageEmbed()
-                    .setColor(process.env.COLOR)
-                    .setTitle(`✳️ Added ${song.length} to queue`)
-                    .setDescription(`${song.url}`)
-                    .setFooter('PogWorks Studios ©️ 2021')
-                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
-            } catch (err) {
-                console.log(err);
-                const embed = new MessageEmbed()
-                    .setColor(process.env.COLOR)
-                    .setTitle('❌  Failed  ❌')
-                    .setFooter('PogWorks Studios ©️ 2021')
-                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             }
         }
     }
