@@ -1,11 +1,12 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports = function stop(message, serverQueue, song) {
+module.exports = function stop(message, serverQueue) {
     try {
         if (!message.member.voice.channel)
             return message.channel.send("You need to join the voice chat first!");
 
-        song = [];
+        serverQueue.looping = false;
+        serverQueue.songs = [];
         serverQueue.connection.dispatcher.end();
 
         const embed = new MessageEmbed()

@@ -10,7 +10,7 @@ module.exports = async function lyrics(message, serverQueue, queueIndex) {
 
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
-            .setTitle(`${serverQueue.songs[queueIndex].title}`)
+            .setTitle('get rick rolled :joy:')
             .setFooter('PogWorks Studios ©️ 2021')
 
         for (var i = 0; i < lyrics.length; i++) {
