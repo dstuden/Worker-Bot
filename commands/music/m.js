@@ -248,8 +248,8 @@ module.exports = {
 
                 }
                 // gonna make this an array with avalible file types
-                else if (content.endsWith('mp3')||content.endsWith('mp4')||content.endsWith('mkv')) {
-                    
+                else if (content.endsWith('mp3') || content.endsWith('mp4') || content.endsWith('mkv')) {
+
                     let song = {
                         title: "untitled",
                         url: content,
@@ -355,7 +355,8 @@ module.exports = {
                 queueIndex = 0;
                 return;
             }
-            const dispatcher = serverQueue.connection
+            if(content.endsWith('mp3') || content.endsWith('mp4') || content.endsWith('mkv')){
+                const dispatcher = serverQueue.connection
                 .play(song.url)
                 .on('finish', () => {
                     if (serverQueue.songs.length - queueIndex === 1) {
@@ -376,6 +377,30 @@ module.exports = {
                         play(guild, serverQueue.songs[queueIndex]);
                     }
                 })
+            }
+            else{
+                const dispatcher = serverQueue.connection
+                .play(ytdl(song.url))
+                .on('finish', () => {
+                    if (serverQueue.songs.length - queueIndex === 1) {
+
+                        if (serverQueue.looping === true) {
+                            queueIndex = -1;
+                        }
+                        else if (serverQueue.looping === false) {
+                            serverQueue.songs = [];
+                        }
+
+                        queueIndex++;
+                        play(guild, serverQueue.songs[queueIndex]);
+
+                    }
+                    else {
+                        queueIndex++;
+                        play(guild, serverQueue.songs[queueIndex]);
+                    }
+                })
+            }
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle(`▶️ Now playing ${serverQueue.songs[queueIndex].title}`)
