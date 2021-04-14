@@ -48,7 +48,7 @@ module.exports = {
 
         let file = content.split('.');
         file = file.pop();
-        
+
         // shitty (i know) command handler
         switch (command) {
             case 'p':
@@ -104,44 +104,48 @@ module.exports = {
                 // checks what type of content is requested
                 if (content.startsWith("https://www.youtube.com/watch")) {
                     const songInfo = await ytdl.getInfo(content);
-
-                    let song = {
-                        title: songInfo.videoDetails.title,
-                        url: songInfo.videoDetails.video_url,
-                        name: songInfo.videoDetails.media.song,
-                        artist: songInfo.videoDetails.media.artist
-                    };
-
-                    if (!serverQueue) {
-                        const queueConstructor = {
-                            txtChannel: message.channel,
-                            vChannel: vc,
-                            connection: null,
-                            songs: [],
-                            volume: 5,
-                            playing: true,
-                            looping: false
+                    try {
+                        let song = {
+                            title: songInfo.videoDetails.title,
+                            url: songInfo.videoDetails.video_url,
+                            name: songInfo.videoDetails.media.song,
+                            artist: songInfo.videoDetails.media.artist
                         };
-                        queue.set(message.guild.id, queueConstructor);
 
-                        if (serverQueue.songs.length < 100)
+                        if (!serverQueue) {
+
+                            const queueConstructor = {
+                                txtChannel: message.channel,
+                                vChannel: vc,
+                                connection: null,
+                                songs: [],
+                                volume: 5,
+                                playing: true,
+                                looping: false
+                            };
+                            queue.set(message.guild.id, queueConstructor);
 
                             queueConstructor.songs.push(song);
 
-                        let connection = await vc.join();
-                        queueConstructor.connection = connection;
-                        play(message.guild, queueConstructor.songs[queueIndex]);
 
+                            let connection = await vc.join();
+                            queueConstructor.connection = connection;
+                            play(message.guild, queueConstructor.songs[0]);
+
+                        }
+                        else {
+                            serverQueue.songs.push(song);
+                            serverQueue.looping = false;
+                            const embed = new MessageEmbed()
+                                .setColor(process.env.COLOR)
+                                .setTitle(`✳️ Added to queue ${song.title}`)
+                                .setDescription(`${song.url}`)
+                                .setFooter('PogWorks Studios ©️ 2021')
+                            return message.channel.send(embed).then(m => m.delete({ timeout: 20000 })).catch(err => console.error(err));
+                        }
                     }
-                    else {
-                        serverQueue.songs.push(song);
-                        serverQueue.looping = false;
-                        const embed = new MessageEmbed()
-                            .setColor(process.env.COLOR)
-                            .setTitle(`✳️ Added to queue ${song.title}`)
-                            .setDescription(`${song.url}`)
-                            .setFooter('PogWorks Studios ©️ 2021')
-                        return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    catch (err) {
+                        console.log(err);
                     }
 
                 }
@@ -356,7 +360,7 @@ module.exports = {
                 queueIndex = 0;
                 return;
             }
-            
+
             let file = serverQueue.songs[queueIndex].url.split('.'); // in case there is a file in the queue
             file = file.pop();
 
@@ -406,7 +410,7 @@ module.exports = {
                         }
                     })
             }
-            
+
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle(`▶️ Now playing ${serverQueue.songs[queueIndex].title}`)
