@@ -4,7 +4,7 @@ const fs = require('fs');
 module.exports = {
     name: 'funny',
     category: 'fun',
-    description: 'returns a funny',
+    description: 'returns a linux memes',
     usage: `funny`,
     run: async (client, message) => {
         function getRandomLine(filename) {
