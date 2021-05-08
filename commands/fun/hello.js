@@ -7,8 +7,6 @@ module.exports = {
     usage: `hello`,
     run: async (client, message) => {
 
-        message.delete().catch(err => console.error(err));
-
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('Hello!')
