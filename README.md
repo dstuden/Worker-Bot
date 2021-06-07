@@ -7,4 +7,4 @@ A shitty disord bot for your shitty server!
 * the mute/abyss commands will have no effect if other roles give members permissions to type, etc..
 * bot role need to be higher than the mute/abyss role for it to work
 * the help command will send you a message in the server if you have public DM's off 
-* bot can currently only play youtube links/search on youtube
+* bot can't play playlists
