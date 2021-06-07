@@ -8,7 +8,7 @@ module.exports = async (client, message) => {
     if (message.author.bot) return;
     if (message.author.id=="797181845271740517"||message.author.id=="724215038818123788") return;
     if (!message.guild) {
-        return message.channel.send("No DM's pls!");
+        return message.channel.send("Please don't send me DMs!");
     }
 
 
