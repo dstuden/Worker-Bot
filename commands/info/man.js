@@ -4,10 +4,10 @@ const Guild = require('../../models/guild');
 const { stripIndents } = require('common-tags');
 
 module.exports = {
-    name: 'help',
+    name: 'man',
     category: 'info',
     description: 'displays a full list of bot commands',
-    usage: `help`,
+    usage: `man`,
     run: async (client, message) => {
 
         await Guild.findOne({

@@ -3,10 +3,10 @@ const wikifeet = require('wikifeet-js');
 const talkedRecently = new Set();
 
 module.exports = {
-    name: 'feet',
+    name: 'curl',
     category: 'fun',
     description: 'lewd...',
-    usage: `feet <name>`,
+    usage: `curl <name>`,
     run: async (client, message) => {
 
         try {

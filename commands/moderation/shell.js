@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const Guild = require('../../models/guild');
 
 module.exports = {
-    name: 'prefix',
+    name: 'shell',
     category: 'moderation',
     description: 'changes the prefix for the current server',
-    usage: `prefix`,
+    usage: `shell`,
     run: async (client, message) => {
 
         if (message.member.hasPermission("MANAGE_GUILD")) {

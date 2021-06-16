@@ -2,7 +2,7 @@ module.exports = (client) => {
     console.log(`Logged in as ${client.user.tag}`)
     client.user.setPresence({
         activity: {
-            name: 'PogOS!',
+            name: 'systemd!',
             type: 'PLAYING'
         }
     });

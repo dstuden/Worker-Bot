@@ -1,10 +1,10 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-    name: 'serverinfo',
+    name: 'ls',
     category: 'info',
     description: 'returns info about the server',
-    usage: `serverinfo`,
+    usage: `ls`,
     run: async (client, message) => {
         const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)

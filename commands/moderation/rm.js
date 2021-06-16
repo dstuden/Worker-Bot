@@ -3,10 +3,10 @@ const talkedRecently = new Set();
 
 
 module.exports = {
-    name: 'purge',
+    name: 'rm',
     category: 'moderation',
     description: 'deletes messages',
-    usage: `purge`,
+    usage: `rm`,
     run: async (client, message) => {
         if (message.member.hasPermission('MANAGE_MESSAGES')) {
             if (talkedRecently.has(message.author.id)) {
