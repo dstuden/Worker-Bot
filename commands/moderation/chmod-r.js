@@ -1,10 +1,10 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-    name: 'abyss',
+    name: 'chmod-r',
     category: 'moderation',
     description: 'sends a user into the abyss',
-    usage: `abyss`,
+    usage: `chmod-r`,
     run: async (client, message) => {
         if (!message.member.hasPermission('MANAGE_ROLES')) {
             const embed = new MessageEmbed()

@@ -2,10 +2,10 @@ const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
-    name: 'unmute',
+    name: 'chmod+w',
     category: 'moderation',
     description: 'Unmutes a user.',
-    usage: `unmute`,
+    usage: `chmod+w`,
     run: async (client, message) => {
         if (!message.member.hasPermission('MANAGE_ROLES')) {
             const embed = new MessageEmbed()
