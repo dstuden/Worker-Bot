@@ -23,11 +23,11 @@
     "fs": "0.0.1-security",
     "lyrics-finder": "^21.7.0",
     "mongoose": "^5.12.1",
-    "npm": "^7.7.5",
+    "npm": "^7.21.0",
     "spotify-url-info": "^2.2.0",
     "tfortune": "^1.0.1",
     "wikifeet-js": "^1.0.0",
-    "ytdl-core": "^4.5.0",
+    "ytdl-core": "^4.9.1",
     "ytpl": "^2.1.0",
     "ytsearcher": "^1.2.4"
   }
