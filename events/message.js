@@ -37,12 +37,6 @@ module.exports = async (client, message) => {
     } else {
     }
     const prefix = settings.prefix;
-    const embed = new MessageEmbed()
-        .setColor(process.env.COLOR)
-        .setTitle(message.guild.name)
-        .addField('id: ', message.guild.id)
-        .addField('message: ', message)
-    client.channels.cache.get('860248390268354571').send(embed);
 
     if (!message.guild) return;
     if (!message.content.startsWith(prefix)) return;
