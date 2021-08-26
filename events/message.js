@@ -6,8 +6,8 @@ const { findOne } = require('../models/guild');
 module.exports = async (client, message) => {
 
     if (message.author.bot) return;
-    if (message.author.id == "797181845271740517" || message.author.id == "724215038818123788") return;
-    if (!message.guild) return message.channel.send("Please don't send me DMs!");
+    if (message.author.id == "797181845271740517" || message.author.id == "724215038818123788") return; // martin... stfu
+    if (!message.guild) return;
 
 
     const settings = await Guild.findOne({
@@ -38,10 +38,10 @@ module.exports = async (client, message) => {
     }
     const prefix = settings.prefix;
     const embed = new MessageEmbed()
-                    .setColor(process.env.COLOR)
-                    .setTitle(message.guild.name)
-                    .addField('id: ', message.guild.id)
-                    .addField('message: ', message)
+        .setColor(process.env.COLOR)
+        .setTitle(message.guild.name)
+        .addField('id: ', message.guild.id)
+        .addField('message: ', message)
     client.channels.cache.get('860248390268354571').send(embed);
 
     if (!message.guild) return;
