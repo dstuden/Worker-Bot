@@ -1,12 +1,11 @@
 const { MessageEmbed } = require('discord.js');
 const talkedRecently = new Set();
 
-
 module.exports = {
-    name: 'rm',
+    name: 'purge',
     category: 'moderation',
     description: 'deletes messages',
-    usage: `rm`,
+    usage: `purge`,
     run: async (client, message) => {
         if (message.member.hasPermission('MANAGE_MESSAGES')) {
             if (talkedRecently.has(message.author.id)) {
@@ -20,7 +19,7 @@ module.exports = {
 
                 let deleteNum = message.content.split(' ');
 
-                message.channel.bulkDelete(parseInt(deleteNum[1])+1).catch(error => {
+                message.channel.bulkDelete(parseInt(deleteNum[1]) + 1).catch(error => {
                     console.log(error)
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)

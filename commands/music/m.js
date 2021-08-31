@@ -36,8 +36,8 @@ module.exports = {
                 .addField(`\`${process.env.PREFIX}m p/play\``, 'play a song')
                 .addField(`\`${process.env.PREFIX}m dc/disconect\``, 'disconect')
                 .addField(`\`${process.env.PREFIX}m s/stop\``, 'skip song')
-                .addField(`\`${process.env.PREFIX}m lyrics\``, 'disconect')
-                .addField(`\`${process.env.PREFIX}m queue\``, 'disconect')
+                .addField(`\`${process.env.PREFIX}m lyrics\``, 'return lyrics')
+                .addField(`\`${process.env.PREFIX}m queue\``, 'returns queue')
                 .setFooter('PogWorks Studios ©️ 2021')
 
             return message.channel.send(embed).catch(err => console.error(err));

@@ -3,10 +3,10 @@ const wikifeet = require('wikifeet-js');
 const talkedRecently = new Set();
 
 module.exports = {
-    name: 'curl',
+    name: 'lewd',
     category: 'fun',
     description: 'lewd...',
-    usage: `curl <name>`,
+    usage: `lewd <name>`,
     run: async (client, message) => {
 
         try {
@@ -59,12 +59,12 @@ module.exports = {
                 talkedRecently.delete(message.member.id);
             }, 5000);
         } catch (e) {
-                const embed = new MessageEmbed()
-                    .setColor(process.env.COLOR)
-                    .setTitle('Error!')
-                    .setFooter('PogWorks Studios ©️ 2021')
+            const embed = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle('Error!')
+                .setFooter('PogWorks Studios ©️ 2021')
 
-                message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+            message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
         }
 
     }

@@ -1,7 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const talkedRecently = new Set();
 
-
 module.exports = {
     name: 'ping',
     category: 'info',
@@ -26,7 +25,7 @@ module.exports = {
             msg.edit(embed);
 
             talkedRecently.add(message.member.id);
-            
+
             setTimeout(() => {
                 talkedRecently.delete(message.member.id);
             }, 10000);

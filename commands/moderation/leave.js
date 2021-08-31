@@ -1,10 +1,10 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-    name: 'poweroff',
+    name: 'leave',
     category: 'moderation',
     description: 'leaves the server',
-    usage: `poweroff`,
+    usage: `leave`,
     run: async (client, message) => {
         message.delete();
         if (message.member.hasPermission('MANAGE_GUILD' || 'KICK_MEMBERS')) {
