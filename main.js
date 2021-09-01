@@ -31,4 +31,3 @@ fs.readdir('./events', (err, files) => {
 
 client.mongoose.init();
 client.login(process.env.BOT_TOKEN);
-
