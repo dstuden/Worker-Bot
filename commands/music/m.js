@@ -11,7 +11,7 @@ const skip = require('./functions/skip.js');
 const queueList = require('./functions/queueList.js');
 const loop = require('./functions/loop.js');
 
-const queue = new Map(), fileTypes = ['mp3', 'mp4', 'mkv'];
+const queue = new Map(), fileTypes = ['mp3', 'mp4', 'mkv', 'flac', 'webm'];
 
 // for keeping track what's playing
 var queueIndex = 0;
