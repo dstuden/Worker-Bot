@@ -7,7 +7,7 @@ module.exports = function stop(message, serverQueue) {
 
         serverQueue.looping = false;
         serverQueue.songs = [];
-        serverQueue.connection.dispatcher.end();
+        message.guild.me.voice.channel.leave();
 
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)

@@ -1,15 +1,18 @@
 const { MessageEmbed } = require('discord.js');
 const lyricsFinder = require('lyrics-finder');
 
-module.exports = function reset(message, queue) {
+module.exports = function reset(message, queue, serverQueue, _queueIndex) {
     try {
-        message.guild.me.voice.channel.leave();
+        serverQueue.looping = false;
+        serverQueue.songs = [];
+        queueIndex = 0;
         queue.delete(message.guild.id); // aaaaaaaaaaaaa fucking christ im braindead
+        message.guild.me.voice.channel.leave();
 
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle(`✅ Reset successful`)
-            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+        return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
     }
     catch (err) {
         const embed = new MessageEmbed()

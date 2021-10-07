@@ -14,9 +14,6 @@ const reset = require('./functions/reset.js');
 
 const queue = new Map(), fileTypes = ['mp3', 'mp4', 'mkv', 'flac', 'webm'];
 
-// for keeping track what's playing
-var queueIndex = 0;
-
 module.exports = {
     name: 'm',
     category: 'music',
@@ -25,6 +22,9 @@ module.exports = {
     run: async (client, message) => {
 
         const serverQueue = queue.get(message.guild.id);
+
+        // for keeping track of what's playing
+        let queueIndex = 0;
 
         let command = message.content.split(' ').slice(1);
         command = command[0];
@@ -81,7 +81,7 @@ module.exports = {
                 loop(message, serverQueue);
                 break;
             case 'reset':
-                reset(message, queue);
+                reset(message, queue, serverQueue, queueIndex);
                 break;
         }
 
@@ -135,7 +135,6 @@ module.exports = {
             }
         }
 
-        // this function is only here because i'm to lazy to import/export all the shit
         function play(guild, song) {
 
             const serverQueue = queue.get(guild.id);
@@ -233,7 +232,6 @@ module.exports = {
                 queue.set(message.guild.id, queueConstructor);
 
                 queueConstructor.songs.push(song);
-
 
                 let connection = await vc.join();
                 queueConstructor.connection = connection;
