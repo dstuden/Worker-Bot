@@ -18,7 +18,7 @@ module.exports = function reset(message, serverQueue, queue) {
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle(`Reset failed!`)
-            .setDescription('Please submit an issue on my github page.')
+            .setDescription('Please submit the issue on my github page.')
         serverQueue.txtChannel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         console.error(err);
     }
