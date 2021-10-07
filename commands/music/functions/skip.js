@@ -9,13 +9,14 @@ module.exports = function skip(message, serverQueue, queueIndex) {
 
         queueIndex++;
         serverQueue.connection.dispatcher.end();
-
     }
     catch (err) {
+        message.guild.me.voice.channel.leave();
+
         console.log(err);
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
-            .setTitle('❌  Failed  ❌')
+            .setTitle('❌  Failed because Heroku is poop  ❌')
             .setFooter('PogWorks Studios ©️ 2021')
 
         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));

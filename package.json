@@ -13,6 +13,8 @@
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
     "@distube/ytsr": "^1.0.8",
+    "@sentry/node": "^6.13.3",
+    "@sentry/tracing": "^6.13.3",
     "async_hooks": "^1.0.0",
     "avconv": "^3.1.0",
     "common-tags": "^1.8.0",

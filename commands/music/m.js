@@ -81,7 +81,7 @@ module.exports = {
                 loop(message, serverQueue);
                 break;
             case 'reset':
-                reset(message, serverQueue, queue);
+                reset(message, queue);
                 break;
         }
 
@@ -131,6 +131,7 @@ module.exports = {
                 else {
                     searchSong(queueConstructor, vc);
                 }
+
             }
         }
 
