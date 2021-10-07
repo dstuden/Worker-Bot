@@ -4,10 +4,10 @@ const lyricsFinder = require('lyrics-finder');
 module.exports = function reset(message, serverQueue, queue) {
     try {
        
+        serverQueue.connection.dispatcher.end();
         serverQueue = queue.get(message.guild.id);
         serverQueue.looping = false;
         serverQueue.songs = [];
-        serverQueue.connection.dispatcher.end();
 
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
