@@ -6,7 +6,6 @@ const { findOne } = require('../models/guild');
 module.exports = async (client, message) => {
 
     if (message.author.bot) return;
-    if (message.author.id == "797181845271740517" || message.author.id == "724215038818123788") return; // martin... stfu
     if (!message.guild) return;
 
 
@@ -52,4 +51,10 @@ module.exports = async (client, message) => {
     if (!command) command = client.commands.get(client.aliases.get(cmd));
 
     if (command) command.run(client, message, args);
+    else {
+        const embed = new MessageEmbed()
+            .setColor(process.env.COLOR)
+            .setTitle('💀 Wrong Command! 💀');
+        return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+    }
 };

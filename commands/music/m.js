@@ -10,7 +10,6 @@ const lyrics = require('./functions/lyrics.js');
 const skip = require('./functions/skip.js');
 const queueList = require('./functions/queueList.js');
 const loop = require('./functions/loop.js');
-const reset = require('./functions/reset.js');
 
 const queue = new Map(), fileTypes = ['mp3', 'mp4', 'mkv', 'flac', 'webm'];
 
@@ -60,10 +59,10 @@ module.exports = {
                 execute(message, serverQueue);
                 break;
             case 'dc':
-                stop(message, serverQueue);
+                stop(message, queue, serverQueue, queueIndex);
                 break;
             case 'disconect':
-                stop(message, serverQueue);
+                stop(message, queue, serverQueue, queueIndex);
                 break;
             case 's':
                 skip(message, serverQueue, queueIndex);
@@ -80,9 +79,13 @@ module.exports = {
             case 'loop':
                 loop(message, serverQueue);
                 break;
-            case 'reset':
-                reset(message, queue, serverQueue, queueIndex);
+            default:
+                const embed = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle(`💀 Wrong command! 💀`)
+                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                 break;
+
         }
 
         async function execute(message, serverQueue) {
