@@ -96,7 +96,7 @@ module.exports = {
         break;
       case "help":
         message.channel
-          .send(wrongEmbed)
+          .send(helpEmbed)
           .then((m) => m.delete({ timeout: 10000 }))
           .catch((err) => console.error(err));
         break;
