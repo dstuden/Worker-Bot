@@ -22,6 +22,7 @@ module.exports = async (client, message) => {
             userID: message.author.id,
             messages: 1,
             voiceTime: 0,
+            joinTimeStamp: 0
         })
 
         newUser.save()

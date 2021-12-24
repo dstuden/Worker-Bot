@@ -6,6 +6,7 @@ const guildSchema = mongoose.Schema({
     userID: String,
     messages: Number,
     voiceTime: Number,
+    joinTimeStamp: Number
 });
 
 module.exports = mongoose.model('User', guildSchema, 'users');
