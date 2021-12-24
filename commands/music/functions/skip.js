@@ -17,7 +17,6 @@ module.exports = function skip(message, serverQueue, queueIndex) {
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('❌  Failed because Heroku is poop  ❌')
-            .setFooter('PogWorks Studios ©️ 2021')
 
         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
     }

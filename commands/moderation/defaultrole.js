@@ -35,7 +35,6 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('This server was not in my database! You can now use commands!')
-                    .setFooter('PogWorks Studios ©️ 2021')
 
                 return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             } else {
@@ -46,7 +45,6 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Enter a role id!')
-                    .setFooter('PogWorks Studios ©️ 2021')
 
                 return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
@@ -60,14 +58,12 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle('The new default role for this server is ' + newRole[1])
-                        .setFooter('PogWorks Studios ©️ 2021')
 
                     message.channel.send(embed).catch(err => console.error(err));
                 } else {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle('Enter a valid role id!')
-                        .setFooter('PogWorks Studios ©️ 2021')
 
                     return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                 }
@@ -77,7 +73,6 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that!')
-                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         }

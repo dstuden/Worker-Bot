@@ -7,7 +7,6 @@ module.exports = function skip(message, serverQueue) {
 
         let embed = new MessageEmbed()
             .setColor(process.env.COLOR)
-            .setFooter('PogWorks Studios ©️ 2021')
 
         if (!serverQueue.muted) {
             embed.setTitle('🔇 Muted notifications! 🔇');
@@ -27,7 +26,6 @@ module.exports = function skip(message, serverQueue) {
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('❌  Failed because Heroku is poop  ❌')
-            .setFooter('PogWorks Studios ©️ 2021')
 
         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
     }

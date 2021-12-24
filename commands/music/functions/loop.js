@@ -10,7 +10,6 @@ module.exports = function loop(message, serverQueue) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle(`🛑 no longer looping the queue`)
-                .setFooter('PogWorks Studios ©️ 2021')
             message.channel.send(embed).then(m => m.delete({ timeout: 30000 })).catch(err => console.error(err));
         }
         else if (serverQueue.looping === false) {
@@ -18,7 +17,6 @@ module.exports = function loop(message, serverQueue) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('🔄 now looping the queue')
-                .setFooter('PogWorks Studios ©️ 2021')
             message.channel.send(embed).then(m => m.delete({ timeout: 30000 })).catch(err => console.error(err));
         }
     }
@@ -27,7 +25,6 @@ module.exports = function loop(message, serverQueue) {
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('❗ nothing to loop ❗')
-            .setFooter('PogWorks Studios ©️ 2021')
 
         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
     }
