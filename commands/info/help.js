@@ -42,7 +42,6 @@ async function getAll(client, message) {
         .setColor(process.env.COLOR)
         .setTitle('Available commands')
         .setThumbnail(client.user.avatarURL())
-        .setFooter('PogWorks Studios ©️ 2021')
 
     const commands = (category) => {
         return client.commands

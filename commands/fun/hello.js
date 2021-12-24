@@ -11,7 +11,6 @@ module.exports = {
             .setColor(process.env.COLOR)
             .setTitle('Hello!')
             .setImage('https://i.pinimg.com/originals/03/68/c2/0368c21a37cce3e3628ff8eeccc4e2a4.gif')
-            .setFooter('PogWorks Studios ©️ 2021')
 
         message.channel.send(embed).catch(err => console.error(err));
 

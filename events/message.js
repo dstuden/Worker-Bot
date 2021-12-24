@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { MessageEmbed } = require('discord.js');
 const Guild = require('../models/guild');
+const GuildUser = require('../models/guildUser');
 const { findOne } = require('../models/guild');
 
 module.exports = async (client, message) => {
@@ -8,6 +9,28 @@ module.exports = async (client, message) => {
     if (message.author.bot) return;
     if (!message.guild) return;
 
+    const userInfo = await GuildUser.findOne({
+        userID: message.author.id,
+    }).catch(err => {
+        console.error(err)
+    });
+
+    if (userInfo === null) {
+        const newUser = new GuildUser({
+            _id: mongoose.Types.ObjectId(),
+            username: message.author.tag,
+            userID: message.author.id,
+            messages: 1,
+            voiceTime: 0,
+        })
+
+        newUser.save()
+            .catch(err => console.error(err));
+    }
+    else {
+        let messageCount = userInfo.messages+1;
+        await GuildUser.findOneAndUpdate({ userID: message.author.id }, {messages: messageCount})
+    }
 
     const settings = await Guild.findOne({
         guildID: message.guild.id
@@ -33,7 +56,6 @@ module.exports = async (client, message) => {
             .setTitle('This server was not in my database! You can now use commands!');
 
         return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
-    } else {
     }
     const prefix = settings.prefix;
 

@@ -17,8 +17,6 @@ module.exports = {
             .addField('Text channels | Voice channels', `${message.guild.channels.cache.filter(channel => channel.type === 'text').size} | ${message.guild.channels.cache.filter(channel => channel.type === 'voice').size}`)
             .addField('Roles', message.guild.roles.cache.size)
             .addField('📅 Created at', message.guild.createdAt)
-            .setFooter('PogWorks Studios ©️ 2021')
-
 
         return message.channel.send(embed).catch(err => console.error(err));
     }

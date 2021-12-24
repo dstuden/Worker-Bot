@@ -28,7 +28,6 @@ module.exports = {
                                 .setColor(process.env.COLOR)
                                 .setTitle(`Successfully kicked ${user.tag}`)
                                 .addField(`Kicked by ${author}`, 'With the reason: ' + reason)
-                                .setFooter('PogWorks Studios ©️ 2021')
 
                             message.channel.send(embed).catch(err => console.error(err));
                         })
@@ -36,7 +35,6 @@ module.exports = {
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`Failed to kick ${user.tag}`)
-                                .setFooter('PogWorks Studios ©️ 2021')
 
                             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
@@ -46,7 +44,6 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`Unknown user!`)
-                        .setFooter('PogWorks Studios ©️ 2021')
 
                     message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                 }
@@ -55,7 +52,6 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle(`No users were mentioned!`)
-                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 10000 }))
             }

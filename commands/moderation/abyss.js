@@ -32,8 +32,6 @@ module.exports = {
                             .setColor(process.env.COLOR)
                             .setTitle(`${user.tag} is now in the abyss!`)
                             .addField(`Sent into the abyss by ${author}`, 'With the reason: ' + reason)
-                            .setFooter('PogWorks Studios ©️ 2021')
-
 
                         message.channel.send(embed).catch(err => console.error(err));
 
@@ -41,8 +39,6 @@ module.exports = {
                         const embed = new MessageEmbed()
                             .setColor(process.env.COLOR)
                             .setTitle(`Unknown user!`)
-                            .setFooter('PogWorks Studios ©️ 2021')
-
 
                         message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
                     }
@@ -50,7 +46,6 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle(`No users were mentioned!`)
-                        .setFooter('PogWorks Studios ©️ 2021')
 
                     message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
 
@@ -59,8 +54,7 @@ module.exports = {
             } else {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
-                    .setTitle(`Please generate the ABYSS role first!`)
-                    .setFooter('PogWorks Studios ©️ 2021')
+                    .setTitle(`Please use \`$genabyss\` first!`)
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             }

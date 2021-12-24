@@ -23,7 +23,6 @@ module.exports = {
                         SEND_MESSAGES: false,
                         ADD_REACTIONS: false
                     })
-                        .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
                         .catch(console.error);
                 })
 
@@ -35,7 +34,6 @@ module.exports = {
                         SEND_MESSAGES: false,
                         ADD_REACTIONS: false
                     })
-                        .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
                         .catch(console.error);
                 })
             }
@@ -43,7 +41,6 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('Generated channel settings for role MUTED!')
-                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).catch(err => console.error(err));
 
@@ -51,7 +48,6 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that')
-                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         }

@@ -35,7 +35,6 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('This server was not in my database! You can now use commands!')
-                    .setFooter('PogWorks Studios ©️ 2021')
 
                 return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             } else {
@@ -47,7 +46,6 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Enter the new prefix!')
-                    .setFooter('PogWorks Studios ©️ 2021')
 
                 return message.channel.send(embed).catch(err => console.error(err));
 
@@ -59,7 +57,6 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('The new prefix for this server is ' + newPrefix[1])
-                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
             }
@@ -69,7 +66,6 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that!')
-                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         }
