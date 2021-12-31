@@ -197,9 +197,9 @@ module.exports = {
       }
       if (!serverQueue.muted) {
         const playEmbed = new MessageEmbed()
-        .setColor(process.env.COLOR)
-        .setTitle(`▶️ Now playing ${serverQueue.songs[queueIndex].title}`)
-        .setDescription(`${serverQueue.songs[queueIndex].url}`);
+          .setColor(process.env.COLOR)
+          .setTitle(`▶️ Now playing ${serverQueue.songs[queueIndex].title}`)
+          .setDescription(`${serverQueue.songs[queueIndex].url}`);
 
         serverQueue.txtChannel
           .send(playEmbed)
@@ -229,9 +229,9 @@ module.exports = {
         serverQueue.looping = false;
 
         const queueEmbed = new MessageEmbed()
-        .setColor(process.env.COLOR)
-        .setTitle(`✳️ Added to queue ${song.title}`)
-        .setDescription(`${song.url}`);
+          .setColor(process.env.COLOR)
+          .setTitle(`✳️ Added to queue ${song.title}`)
+          .setDescription(`${song.url}`);
 
         return message.channel
           .send(queueEmbed)

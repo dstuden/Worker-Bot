@@ -23,7 +23,6 @@ module.exports = {
                         SEND_MESSAGES: false,
                         VIEW_CHANNEL: false
                     })
-                        .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
                         .catch(console.error);
                 })
                 //generate the perms for all voice channels
@@ -45,7 +44,6 @@ module.exports = {
                         SEND_MESSAGES: false,
                         VIEW_CHANNEL: false
                     })
-                        .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
                         .catch(console.error);
                 })
                 //generate the perms for all voice channels
@@ -55,7 +53,6 @@ module.exports = {
                         CONNECT: false,
                         VIEW_CHANNEL: false
                     })
-                        .then(channel => console.log(channel.permissionOverwrites.get(message.author.id)))
                         .catch(console.error);
                 })
             }
@@ -63,7 +60,6 @@ module.exports = {
             const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Generated channel settings for role ABYSS!')
-                    .setFooter('PogWorks Studios ©️ 2021')
 
                 message.channel.send(embed).catch(err => console.error(err));
 
@@ -71,7 +67,6 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that')
-                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         }

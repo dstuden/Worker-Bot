@@ -9,7 +9,6 @@ module.exports = function queueList(message, serverQueue, queueIndex) {
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('⏭️  Queue')
-            .setFooter('PogWorks Studios ©️ 2021')
 
         for (let i = 0; (queueIndex < serverQueue.songs.length) && (queueIndex < 10); queueIndex++) {
             embed.addField('‏‏‎ ‎', `${i + 1}. [${serverQueue.songs[queueIndex].title}](${serverQueue.songs[queueIndex].url})`);

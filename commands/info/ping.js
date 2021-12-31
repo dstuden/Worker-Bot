@@ -20,7 +20,6 @@ module.exports = {
                 .setColor(process.env.COLOR)
                 .setTitle('🏓 Pong!')
                 .setDescription(`Bot Latency is **${Math.floor(msg.createdTimestamp - message.createdTimestamp)} ms** \nAPI Latency is **${Math.round(client.ws.ping)} ms**`)
-                .setFooter('PogWorks Studios ©️ 2021')
 
             msg.edit(embed);
 
