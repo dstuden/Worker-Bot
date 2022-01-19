@@ -15,8 +15,9 @@ module.exports = {
             /(webp|jpg|jpeg|png)/.test(response.file_url)? embed.setImage(response.file_url) : embed.attachFiles([{ name: 'foob.png', attachment: response.file_url }])
         } else {
             embed.setImage(foob404)
+            embed.setTitle("Whoops!")
         }
-        
+
         message.channel.send(embed).catch(err => console.error(err));
     }
 }
