@@ -62,9 +62,9 @@ async function User(user, message) {
         .addField("Server member since", "```" + moment(user.joinedAt).format('MMMM Do YYYY, h:mm:ss a') + "```", true)
     if (!isBot) {
         embed
-            .addField("**User stats**", "*as of 25/12/2021*")
+            .addField("**User stats**", "*as of 25/12/2021 from all visible servers*")
             .addField("Number of recorded messages", "```" + userInfo.messages + "```", true)
-            .addField("Time spent in voice channels", "```" + Math.floor(userInfo.voiceTime/1000/60) + " min```", true)
+            .addField("Time spent in voice channels", "```" + Math.ceil(userInfo.voiceTime/60) + " min```", true)
     }
     return message.channel.send(embed).catch((err) => console.error(err));
 }

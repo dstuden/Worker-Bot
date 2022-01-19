@@ -16,14 +16,15 @@ module.exports = async (client, old_state, new_state) => {
         }).catch(err => {
             console.error(err)
         });
-        let joinTime = 0;
+        let joinTime = 0.0;
         if (userInfo)
             joinTime = userInfo.joinTimeStamp;
 
-        let time_in_vc = 0;
+        let time_in_vc = 0.0;
         if (joinTime !== 0)
-            time_in_vc = Date.now() - joinTime;
+            time_in_vc = Math.ceil((Date.now() - joinTime) / 1000);
 
+        console.log(time_in_vc);
         if (userInfo === null) {
             const newUser = new GuildUser({
                 _id: mongoose.Types.ObjectId(),
@@ -39,7 +40,7 @@ module.exports = async (client, old_state, new_state) => {
         }
         else {
             let all_voice_time = userInfo.voiceTime + time_in_vc;
-            await GuildUser.findOneAndUpdate({ userID: user.id }, { voiceTime: all_voice_time })
+            await GuildUser.findOneAndUpdate({ userID: user.id }, { voiceTime: all_voice_time, joinTimeStamp: 0 });
         }
     }
 
