@@ -17,9 +17,9 @@ module.exports = {
                 const baka = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle("Baka!")
-                    .setDescription("Your aren't supposed to tag yourself!!🙃");
+                    .setDescription("Skill issue!");
+                return message.author.send(baka);
 
-                return (User(message.guild.member(message.mentions.users.first().id), message), message.channel.send(baka).catch((err) => console.error(err)));
             }
             else
                 return User(message.guild.member(message.mentions.users.first().id), message);
