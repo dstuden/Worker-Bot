@@ -8,7 +8,7 @@ module.exports = {
     usage: `foob`,
     run: async (client, message) => {
 
-        const url = `post/index.json?limit=1&tags=${message?.channel?.nsfw ? '' : 'rating:s+'}+order:random+shirakami_fubuki`;
+        const url = `post/index.json?limit=1&tags=${message?.channel?.nsfw ? '' : 'rating:s+'}+order:random+uruha_rushia`;
         const response = JSON.parse(await fetch(url))[0];
         const embed = new MessageEmbed().setColor('#d9639a')
         if (response?.file_url) {
