@@ -7,7 +7,6 @@ const { findOne } = require('../models/guild');
 module.exports = async (client, message) => {
 
     if (message.author.bot) return;
-    if (!message.guild) return;
 
     const userInfo = await GuildUser.findOne({
         userID: message.author.id,
@@ -78,6 +77,6 @@ module.exports = async (client, message) => {
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('💀 Wrong Command! 💀');
-        return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+        return message.channel.send({embeds: [embed]}).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
     }
 };

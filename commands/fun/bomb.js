@@ -12,14 +12,20 @@ module.exports = {
                 .setColor(process.env.COLOR)
                 .setTitle('Please wait before using this command again!')
 
-            message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+            message.channel.send({ embeds: [embed] }).then(msg => {
+                message.delete()
+                setTimeout(() => msg.delete(), 5000)
+            }).catch(err => console.error(err));
         } else {
             if (!message.mentions.users.first()) {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('No users mentioned!')
 
-                return message.channel.send(embed).catch(err => console.error(err));
+                return message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 5000)
+                }).catch(err => console.error(err));
             }
 
             for (let i = 0; i < 5; i++) {

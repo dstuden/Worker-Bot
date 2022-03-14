@@ -11,7 +11,7 @@ module.exports = {
     usage: `usrinfo`,
     run: async (client, message) => {
         if (!message.mentions.users.first())
-            return User(message.guild.member(message.author), message);
+            return User(message.guild.members.cache.get(message.author.id), message);
         else
 <<<<<<< HEAD
             return User(message.guild.member(message.mentions.users.first().id), message);
@@ -21,7 +21,7 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle("Baka!")
                     .setDescription("Skill issue!");
-                return message.author.send(baka);
+                return message.channel.send({ embeds: [baka] });
 
             }
             else
@@ -67,7 +67,7 @@ async function User(user, message) {
         .setColor(process.env.COLOR)
         .setTitle(user.user.tag)
         .setThumbnail(user.user.avatarURL())
-        .setDescription(activities)
+        .setDescription(activities.at(activities.length-1)) // always shows the latest activity
         .addField("Roles", `${roles}`)
         .addField(":hash: ID", "```" + user.user.id + "```", true)
         .addField("Is a bot?", "```" + isBot + "```", true)
@@ -86,7 +86,7 @@ async function User(user, message) {
             .addField("Time spent in voice channels", "```" + Math.ceil(userInfo.voiceTime / 60) + " min```", true)
 >>>>>>> master
     }
-    return message.channel.send(embed).catch((err) => console.error(err));
+    return message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
 }
 
 async function fetch_user_info(user) {

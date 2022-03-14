@@ -54,7 +54,8 @@ async function getAll(client, message) {
         .map(idk => stripIndents`**${idk[0].toLowerCase() + idk.slice(1)}** \n${commands(idk)}`)
         .reduce((string, category) => `${string}\n${category}`);
 
-    return message.author.send(embed.setDescription(`\n\n${info}`)).catch(err =>
-        message.channel.send(embed.setDescription(`\n\n${info}`)))
+    return message.author.send({embeds: [embed.setDescription(`\n\n${info}`)]}).catch(err =>
+        message.channel.send({embeds: [embed.setDescription(`\n\n${info}`)]})
+    )
 
 }

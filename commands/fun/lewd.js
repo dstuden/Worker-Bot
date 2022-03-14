@@ -14,9 +14,11 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Please wait before using this command again!')
-                    .setFooter('PogWorks Studios ©️ 2021')
 
-                message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+                message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 5000)
+                }).catch(err => console.error(err));
                 return;
             }
             const query = message.content.split(' ')?.slice(1)?.join(' ');
@@ -25,9 +27,11 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('No query!')
-                    .setFooter('PogWorks Studios ©️ 2021')
 
-                message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+                message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 5000)
+                }).catch(err => console.error(err));
                 return;
             }
 
@@ -38,7 +42,10 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle('Nothing found!')
 
-                message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+                message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 5000)
+                }).catch(err => console.error(err));
                 return;
             }
 
@@ -50,18 +57,24 @@ module.exports = {
                 .setTitle('Enjoy :wink: ')
                 .setImage(`${pics[random]}`)
 
-            message.channel.send(embed).catch(err => console.error(err));
+            message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
 
             talkedRecently.add(message.member.id);
             setTimeout(() => {
                 talkedRecently.delete(message.member.id);
-            }, 5000);
+            }, 10000);
+            
         } catch (e) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('Error!')
 
-            message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+            message.channel.send({ embeds: [embed] }).then(msg => {
+                message.delete()
+                setTimeout(() => msg.delete(), 5000)
+            }).catch(err => console.error(err));
+
+            return;
         }
 
     }

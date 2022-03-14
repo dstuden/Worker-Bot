@@ -1,8 +1,12 @@
-const { Client, Collection } = require('discord.js');
+const { Client, Collection, Intents } = require('discord.js');
 const { config } = require('dotenv');
 const fs = require('fs');
 const mongoose = require('mongoose');
-const client = new Client();
+
+const INTENTS = new Intents;
+INTENTS.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_SCHEDULED_EVENTS);
+
+const client = new Client({ intents: INTENTS});
 
 client.commands = new Collection();
 client.aliases = new Collection();

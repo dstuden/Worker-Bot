@@ -12,13 +12,13 @@ module.exports = {
         const response = JSON.parse(await fetch(url))[0];
         const embed = new MessageEmbed().setColor('#d9639a')
         if (response?.file_url) {
-            /(webp|jpg|jpeg|png)/.test(response.file_url)? embed.setImage(response.file_url) : embed.attachFiles([{ name: 'foob.png', attachment: response.file_url }])
+            /(webp|jpg|jpeg|png)/.test(response.file_url) ? embed.setImage(response.file_url) : embed.attachFiles([{ name: 'foob.png', attachment: response.file_url }])
         } else {
             embed.setImage(foob404)
             embed.setTitle("Whoops!")
         }
 
-        message.channel.send(embed).catch(err => console.error(err));
+        message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
     }
 }
 
