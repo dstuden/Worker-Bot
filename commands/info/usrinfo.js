@@ -13,7 +13,21 @@ module.exports = {
         if (!message.mentions.users.first())
             return User(message.guild.member(message.author), message);
         else
+<<<<<<< HEAD
             return User(message.guild.member(message.mentions.users.first().id), message);
+=======
+            if (message.mentions.users.first().id === message.author.id) {
+                const baka = new MessageEmbed()
+                    .setColor(process.env.COLOR)
+                    .setTitle("Baka!")
+                    .setDescription("Skill issue!");
+                return message.author.send(baka);
+
+            }
+            else
+                return User(message.guild.member(message.mentions.users.first().id), message);
+
+>>>>>>> master
     },
 };
 
@@ -62,9 +76,15 @@ async function User(user, message) {
         .addField("Server member since", "```" + moment(user.joinedAt).format('MMMM Do YYYY, h:mm:ss a') + "```", true)
     if (!isBot) {
         embed
+<<<<<<< HEAD
             .addField("**User stats**", "*as of 25/12/2021*")
             .addField("Number of recorded messages", "```" + userInfo.messages + "```", true)
             .addField("Time spent in voice channels", "```" + Math.floor(userInfo.voiceTime/1000/60) + " min```", true)
+=======
+            .addField("**User stats**", "*as of 25/12/2021 from all visible servers*")
+            .addField("Number of recorded messages", "```" + userInfo.messages + "```", true)
+            .addField("Time spent in voice channels", "```" + Math.ceil(userInfo.voiceTime / 60) + " min```", true)
+>>>>>>> master
     }
     return message.channel.send(embed).catch((err) => console.error(err));
 }

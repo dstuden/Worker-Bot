@@ -8,7 +8,7 @@ const loop = require("./functions/loop.js");
 const mute = require("./functions/mute.js");
 
 const queue = new Map(),
-  fileTypes = ["mp3", "mp4", "mkv", "flac", "webm", "wav", "ogg"];
+  fileTypes = ["mp3", "mp4", "mkv", "flac", "webm", "wav", "ogg", "opus"];
 
 const helpEmbed = new MessageEmbed()
   .setColor(process.env.COLOR)
