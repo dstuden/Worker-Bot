@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 const mongoose = require('mongoose');
 const Guild = require('../../models/guild');
 
@@ -9,7 +9,7 @@ module.exports = {
     usage: `defaultrole`,
     run: async (client, message) => {
 
-        if (message.member.hasPermission("MANAGE_ROLES")) {
+        if (message.member.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
 
             const newRole = message.content.split(' ');
 
@@ -36,17 +36,24 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle('This server was not in my database! You can now use commands!')
 
-                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                return message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 10000)
+                }).catch(err => console.error(err));
+
             } else {
             }
-            const defaultRole = settings.defaultRole;
 
+            console.log(newRole);
             if (typeof newRole[1] === 'undefined') {
                 const embed = new MessageEmbed()
                     .setColor(process.env.COLOR)
                     .setTitle('Enter a role id!')
 
-                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                return message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 10000)
+                }).catch(err => console.error(err));
 
             }
             else {
@@ -59,13 +66,19 @@ module.exports = {
                         .setColor(process.env.COLOR)
                         .setTitle('The new default role for this server is ' + newRole[1])
 
-                    message.channel.send(embed).catch(err => console.error(err));
+                    message.channel.send({ embeds: [embed] }).then(msg => {
+                        message.delete()
+                        setTimeout(() => msg.delete(), 10000)
+                    }).catch(err => console.error(err));
                 } else {
                     const embed = new MessageEmbed()
                         .setColor(process.env.COLOR)
                         .setTitle('Enter a valid role id!')
 
-                    return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    return message.channel.send({ embeds: [embed] }).then(msg => {
+                        message.delete()
+                        setTimeout(() => msg.delete(), 10000)
+                    }).catch(err => console.error(err));
                 }
             }
 
@@ -74,7 +87,10 @@ module.exports = {
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that!')
 
-            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            message.channel.send({ embeds: [embed] }).then(msg => {
+                message.delete()
+                setTimeout(() => msg.delete(), 10000)
+            }).catch(err => console.error(err));
         }
 
 

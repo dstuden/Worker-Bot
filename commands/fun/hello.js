@@ -12,7 +12,6 @@ module.exports = {
             .setTitle('Hello!')
             .setImage('https://i.pinimg.com/originals/03/68/c2/0368c21a37cce3e3628ff8eeccc4e2a4.gif')
 
-        message.channel.send(embed).catch(err => console.error(err));
-
+        message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
     }
 }

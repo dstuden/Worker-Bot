@@ -12,7 +12,10 @@ module.exports = {
                 .setColor(process.env.COLOR)
                 .setTitle('Please wait before using this command again!')
 
-            message.channel.send(embed).then(m => m.delete({ timeout: 5000 })).catch(err => console.error(err));
+            message.channel.send({ embeds: [embed] }).then(msg => {
+                message.delete()
+                setTimeout(() => msg.delete(), 5000)
+            }).catch(err => console.error(err));
         } else {
             const msg = await message.channel.send('🏓 Pinging...');
 
@@ -21,7 +24,7 @@ module.exports = {
                 .setTitle('🏓 Pong!')
                 .setDescription(`Bot Latency is **${Math.floor(msg.createdTimestamp - message.createdTimestamp)} ms** \nAPI Latency is **${Math.round(client.ws.ping)} ms**`)
 
-            msg.edit(embed);
+            msg.edit({embeds: [embed]});
 
             talkedRecently.add(message.member.id);
 

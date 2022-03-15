@@ -11,6 +11,6 @@ module.exports = {
             .setTitle('Here is your invite link')
             .setDescription('https://discord.com/oauth2/authorize?client_id=755532648419557447&scope=bot&permissions=8')
 
-        return message.channel.send(embed).catch(err => console.error(err));
+        return message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
     }
 }

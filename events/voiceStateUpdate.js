@@ -25,6 +25,7 @@ module.exports = async (client, old_state, new_state) => {
             time_in_vc = Math.ceil((Date.now() - joinTime) / 1000);
 
         console.log(time_in_vc);
+
         if (userInfo === null) {
             const newUser = new GuildUser({
                 _id: mongoose.Types.ObjectId(),

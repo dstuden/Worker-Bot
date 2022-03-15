@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 
 module.exports = {
     name: 'kick',
@@ -6,11 +6,10 @@ module.exports = {
     description: 'kicks a user',
     usage: `kick`,
     run: async (client, message) => {
-        if (!message.member.hasPermission('KICK_MEMBERS')) {
+        if (!message.member.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle(`You don't have the permissions to do that!`)
-                .setFooter('PogWorks Studios ©️ 2021')
 
             message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
         } else {
@@ -29,15 +28,17 @@ module.exports = {
                                 .setTitle(`Successfully kicked ${user.tag}`)
                                 .addField(`Kicked by ${author}`, 'With the reason: ' + reason)
 
-                            message.channel.send(embed).catch(err => console.error(err));
+                            message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
                         })
                         .catch(err => {
                             const embed = new MessageEmbed()
                                 .setColor(process.env.COLOR)
                                 .setTitle(`Failed to kick ${user.tag}`)
 
-                            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
-
+                            message.channel.send({ embeds: [embed] }).then(msg => {
+                                message.delete()
+                                setTimeout(() => msg.delete(), 10000)
+                            }).catch(err => console.error(err));
                             console.error(err);
                         });
                 } else {
@@ -45,7 +46,10 @@ module.exports = {
                         .setColor(process.env.COLOR)
                         .setTitle(`Unknown user!`)
 
-                    message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                    message.channel.send({ embeds: [embed] }).then(msg => {
+                        message.delete()
+                        setTimeout(() => msg.delete(), 10000)
+                    }).catch(err => console.error(err));
                 }
 
             } else {
