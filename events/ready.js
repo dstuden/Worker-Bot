@@ -1,9 +1,9 @@
 module.exports = (client) => {
     console.log(`Logged in as ${client.user.tag}`)
     client.user.setPresence({
-        activity: {
+        activities: [{
             name: 'agitprop',
             type: 'LISTENING'
-        },
+        }],
     });
 }

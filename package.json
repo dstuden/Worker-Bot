@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
+    "@discordjs/voice": "github:discordjs/voice",
     "@sentry/node": "^6.13.3",
     "@sentry/tracing": "^6.13.3",
     "async_hooks": "^1.0.0",

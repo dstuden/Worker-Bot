@@ -12,10 +12,7 @@ module.exports = {
     run: async (client, message) => {
         if (!message.mentions.users.first())
             return User(message.guild.members.cache.get(message.author.id), message);
-        else
-<<<<<<< HEAD
-            return User(message.guild.member(message.mentions.users.first().id), message);
-=======
+        else {
             if (message.mentions.users.first().id === message.author.id) {
                 const baka = new MessageEmbed()
                     .setColor(process.env.COLOR)
@@ -26,8 +23,7 @@ module.exports = {
             }
             else
                 return User(message.guild.member(message.mentions.users.first().id), message);
-
->>>>>>> master
+        }
     },
 };
 
@@ -67,7 +63,7 @@ async function User(user, message) {
         .setColor(process.env.COLOR)
         .setTitle(user.user.tag)
         .setThumbnail(user.user.avatarURL())
-        .setDescription(activities.at(activities.length-1)) // always shows the latest activity
+        .setDescription(activities.at(activities.length - 1)) // always shows the latest activity
         .addField("Roles", `${roles}`)
         .addField(":hash: ID", "```" + user.user.id + "```", true)
         .addField("Is a bot?", "```" + isBot + "```", true)
@@ -76,15 +72,9 @@ async function User(user, message) {
         .addField("Server member since", "```" + moment(user.joinedAt).format('MMMM Do YYYY, h:mm:ss a') + "```", true)
     if (!isBot) {
         embed
-<<<<<<< HEAD
-            .addField("**User stats**", "*as of 25/12/2021*")
-            .addField("Number of recorded messages", "```" + userInfo.messages + "```", true)
-            .addField("Time spent in voice channels", "```" + Math.floor(userInfo.voiceTime/1000/60) + " min```", true)
-=======
             .addField("**User stats**", "*as of 25/12/2021 from all visible servers*")
             .addField("Number of recorded messages", "```" + userInfo.messages + "```", true)
             .addField("Time spent in voice channels", "```" + Math.ceil(userInfo.voiceTime / 60) + " min```", true)
->>>>>>> master
     }
     return message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
 }

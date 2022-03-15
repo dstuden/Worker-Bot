@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 const mongoose = require('mongoose');
 const Guild = require('../../models/guild');
 
@@ -9,7 +9,7 @@ module.exports = {
     usage: `prefix`,
     run: async (client, message) => {
 
-        if (message.member.hasPermission("MANAGE_GUILD")) {
+        if (message.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
 
             const newPrefix = message.content.split(' ');
 
@@ -36,7 +36,10 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle('This server was not in my database! You can now use commands!')
 
-                return message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 10000)
+                }).catch(err => console.error(err));
             } else {
             }
             const prefix = settings.prefix;
@@ -47,8 +50,7 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle('Enter the new prefix!')
 
-                return message.channel.send(embed).catch(err => console.error(err));
-
+                return message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
             } else {
                 await settings.updateOne({
                     prefix: newPrefix[1]
@@ -58,7 +60,10 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle('The new prefix for this server is ' + newPrefix[1])
 
-                message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+                message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 10000)
+                }).catch(err => console.error(err));
             }
 
 
@@ -67,7 +72,10 @@ module.exports = {
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that!')
 
-            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            message.channel.send({ embeds: [embed] }).then(msg => {
+                message.delete()
+                setTimeout(() => msg.delete(), 10000)
+            }).catch(err => console.error(err));
         }
     }
 }

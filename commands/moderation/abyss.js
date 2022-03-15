@@ -36,10 +36,7 @@ module.exports = {
                             .setTitle(`${user.tag} is now in the abyss!`)
                             .addField(`Sent into the abyss by ${author}`, 'With the reason: ' + reason)
 
-                        message.channel.send({ embeds: [embed] }).then(msg => {
-                            message.delete()
-                            setTimeout(() => msg.delete(), 10000)
-                        }).catch(err => console.error(err));
+                        message.channel.send({ embeds: [embed] }).catch(err => console.error(err));
 
                     } else {
                         const embed = new MessageEmbed()
@@ -68,10 +65,10 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle(`Please use \`$genabyss\` first!`)
 
-                    message.channel.send({ embeds: [embed] }).then(msg => {
-                        message.delete()
-                        setTimeout(() => msg.delete(), 10000)
-                    }).catch(err => console.error(err));
+                message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 10000)
+                }).catch(err => console.error(err));
             }
         }
     }

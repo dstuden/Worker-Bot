@@ -8,27 +8,24 @@ module.exports = {
     run: async (client, message) => {
         if (message.member.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
             if (!message.member.guild.roles.cache.find(role => role.name === "ABYSS")) { // creates the role if it doesn't exist
-
                 await message.guild.roles.create({
-                    data: {
-                        name: 'ABYSS',
-                        color: 'BLACK',
-                    },
+                    name: 'ABYSS',
+                    color: 'BLACK',
                     reason: 'we needed a role for super annoying People',
                 });
                 //generate the perms for all text channels
-                const guildChannelsText = message.guild.channels.cache.array().filter(channel => channel.type === 'text');
+                const guildChannelsText = message.guild.channels.cache.filter(channel => channel.type === 'GUILD_TEXT');
                 guildChannelsText.forEach(channel => {
-                    channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
+                    channel.permissionOverwrites.edit(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
                         SEND_MESSAGES: false,
                         VIEW_CHANNEL: false
                     })
                         .catch(console.error);
                 })
                 //generate the perms for all voice channels
-                const guildChannelsVoice = message.guild.channels.cache.array().filter(channel => channel.type === 'voice');
+                const guildChannelsVoice = message.guild.channels.cache.filter(channel => channel.type === 'GUILD_VOICE');
                 guildChannelsVoice.forEach(channel => {
-                    channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
+                    channel.permissionOverwrites.edit(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
                         CONNECT: false,
                         VIEW_CHANNEL: false
                     })
@@ -38,43 +35,43 @@ module.exports = {
 
             } else {
                 //generate the perms for all text channels
-                const guildChannelsText = message.guild.channels.cache.array().filter(channel => channel.type === 'text');
+                const guildChannelsText = message.guild.channels.cache.filter(channel => channel.type === 'GUILD_TEXT');
                 guildChannelsText.forEach(channel => {
-                    channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
+                    channel.permissionOverwrites.edit(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
                         SEND_MESSAGES: false,
                         VIEW_CHANNEL: false
                     })
                         .catch(console.error);
                 })
                 //generate the perms for all voice channels
-                const guildChannelsVoice = message.guild.channels.cache.array().filter(channel => channel.type === 'voice');
+                const guildChannelsVoice = message.guild.channels.cache.filter(channel => channel.type === 'GUILD_VOICE');
                 guildChannelsVoice.forEach(channel => {
-                    channel.updateOverwrite(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
+                    channel.permissionOverwrites.edit(message.member.guild.roles.cache.find(role => role.name === "ABYSS"), {
                         CONNECT: false,
                         VIEW_CHANNEL: false
                     })
                         .catch(console.error);
                 })
             }
-            
-            const embed = new MessageEmbed()
-                    .setColor(process.env.COLOR)
-                    .setTitle('Generated channel settings for role ABYSS!')
 
-                    message.channel.send({ embeds: [embed] }).then(msg => {
-                        message.delete()
-                        setTimeout(() => msg.delete(), 10000)
-                    }).catch(err => console.error(err));
+            const embed = new MessageEmbed()
+                .setColor(process.env.COLOR)
+                .setTitle('Generated channel settings for role ABYSS!')
+
+            message.channel.send({ embeds: [embed] }).then(msg => {
+                message.delete()
+                setTimeout(() => msg.delete(), 10000)
+            }).catch(err => console.error(err));
 
         } else {
             const embed = new MessageEmbed()
                 .setColor(process.env.COLOR)
                 .setTitle('You dont have the permissions to do that')
 
-                message.channel.send({ embeds: [embed] }).then(msg => {
-                    message.delete()
-                    setTimeout(() => msg.delete(), 10000)
-                }).catch(err => console.error(err));
+            message.channel.send({ embeds: [embed] }).then(msg => {
+                message.delete()
+                setTimeout(() => msg.delete(), 10000)
+            }).catch(err => console.error(err));
         }
     }
 }
