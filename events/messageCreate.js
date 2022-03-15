@@ -28,8 +28,8 @@ module.exports = async (client, message) => {
             .catch(err => console.error(err));
     }
     else {
-        let messageCount = userInfo.messages+1;
-        await GuildUser.findOneAndUpdate({ userID: message.author.id }, {messages: messageCount})
+        let messageCount = userInfo.messages + 1;
+        await GuildUser.findOneAndUpdate({ userID: message.author.id }, { messages: messageCount })
     }
 
     const settings = await Guild.findOne({
@@ -77,6 +77,9 @@ module.exports = async (client, message) => {
         const embed = new MessageEmbed()
             .setColor(process.env.COLOR)
             .setTitle('💀 Wrong Command! 💀');
-        return message.channel.send({embeds: [embed]}).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+        return message.channel.send({ embeds: [embed] }).then(msg => {
+            message.delete()
+            setTimeout(() => msg.delete(), 10000)
+        }).catch(err => console.error(err));
     }
 };

@@ -11,7 +11,10 @@ module.exports = {
                 .setColor(process.env.COLOR)
                 .setTitle(`You don't have the permissions to do that!`)
 
-            message.channel.send(embed).then(m => m.delete({ timeout: 10000 })).catch(err => console.error(err));
+            message.channel.send({ embeds: [embed] }).then(msg => {
+                message.delete()
+                setTimeout(() => msg.delete(), 10000)
+            }).catch(err => console.error(err));
         } else {
             const user = message.mentions.users.first();
             const author = message.member.user.tag;
@@ -57,7 +60,10 @@ module.exports = {
                     .setColor(process.env.COLOR)
                     .setTitle(`No users were mentioned!`)
 
-                message.channel.send(embed).then(m => m.delete({ timeout: 10000 }))
+                message.channel.send({ embeds: [embed] }).then(msg => {
+                    message.delete()
+                    setTimeout(() => msg.delete(), 10000)
+                }).catch(err => console.error(err));
             }
 
         }
